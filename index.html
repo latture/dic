@@ -135,12 +135,13 @@
 <li>plotting (x,y) data and contour overlays</li>
 <li>creating video frames and turning the image sequence into a video</li>
 </ul>
-<p>The reference IPython notebook shown <a class="reference external" href="https://nbviewer.jupyter.org/github/latture/dic/blob/master/reference_dic_notebook.ipynb">here</a> 
+<p>The reference IPython notebook shown <a class="reference external" href="https://nbviewer.jupyter.org/github/latture/dic/blob/master/reference_dic_notebook.ipynb">here</a>
 describes how to create a video that matches a sequence of DIC overlays to the corresponding stress-strain curve.
 To ensure that all the required packages are available, navigate to the <code class="docutils literal"><span class="pre">dic</span></code> folder in the terminal and execute:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
 </pre></div>
 </div>
+<p>See the <a class="reference external" href="https://latture.github.io/dic/">documentation website</a> for details on all the available functions.</p>
 <div class="section" id="compressing-files">
 <h2>Compressing files<a class="headerlink" href="#compressing-files" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal"><span class="pre">compress.py</span></code> script is included as a convenient way of compressing <code class="docutils literal"><span class="pre">.MAT</span></code> files (those exported from the VIC
@@ -155,7 +156,21 @@ If the output directory does not exist, it will be created.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="modules.html">dic</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="dic.html">dic package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dic.html">Submodules</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.dic_io">dic.dic_io module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.dic_utils">dic.dic_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.extensometer">dic.extensometer module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.frame_creators">dic.frame_creators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.geometry_utils">dic.geometry_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.plot">dic.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.scale">dic.scale module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.smooth">dic.smooth module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.stress_strain">dic.stress_strain module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.strut_metrics">dic.strut_metrics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.variables">dic.variables module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="dic.html#module-dic.video">dic.video module</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
