@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import show, savefig
 import matplotlib.image as mpimg
 import numpy as np
-from .dic_io import load_dic_data
 from .scale import px_per_mm
 
 __all__ = ["plot_overlay", "plot_xy", "plot_colorbar", "show", "savefig"]
