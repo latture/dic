@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.frame_creators &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.frame_creators</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.frame_creators</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">matplotlib.figure</span> <span class="kn">import</span> <span class="n">Figure</span>
+<span class="kn">from</span> <span class="nn">matplotlib.gridspec</span> <span class="kn">import</span> <span class="n">GridSpec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="kn">as</span> <span class="nn">mpimg</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.dic_io</span> <span class="kn">import</span> <span class="n">load_dic_data</span>
+<span class="kn">from</span> <span class="nn">.plot</span> <span class="kn">import</span> <span class="n">plot_overlay</span><span class="p">,</span> <span class="n">plot_colorbar</span><span class="p">,</span> <span class="n">plot_xy</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;OverlayWithStressStrainFrameCreator&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="OverlayWithStressStrainFrameCreator"><a class="viewcode-back" href="../../dic.html#dic.frame_creators.OverlayWithStressStrainFrameCreator">[docs]</a><span class="k">class</span> <span class="nc">OverlayWithStressStrainFrameCreator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class creates a frames of a contour overlay, colorbar and stress-strain plot.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image_filenames : List[str]</span>
+<span class="sd">        List of filenames containing the background images for the overlay plots.</span>
+<span class="sd">    dic_filenames : str</span>
+<span class="sd">        List of filenames containing the DIC data files.</span>
+<span class="sd">    variable : str</span>
+<span class="sd">        Variable from the DIC data to plot on the overlay.</span>
+<span class="sd">    xy_data : List[T], List[T]</span>
+<span class="sd">        Tuple of ``(xdata, ydata)`` to plot on the 2D plot. The length of ``xdata`` and ``ydata`` must be equal and the</span>
+<span class="sd">        same as the number of images and DIC files.</span>
+<span class="sd">    figure_width : float, optional</span>
+<span class="sd">        Width of the figure in inches. The height will be chosen automatically based on the aspect ratio of the overlays.</span>
+<span class="sd">        Default is ``10.0``.</span>
+<span class="sd">    fractional_padding : float, optional</span>
+<span class="sd">        Fraction of the image width to pad between the right of the colorbar and the left of the x-y data plot.</span>
+<span class="sd">        Default is ``0.5``</span>
+<span class="sd">    overlay_contour_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when calling ``matplotlib.pyplot.contourf``. Default is ``None``</span>
+<span class="sd">        Valid keys are ``corner_mask``, ``alpha``, ``cmap``, ``levels``, ``extend``, etc.</span>
+<span class="sd">        See ``matplotlib.pyplot.contourf`` for all valid keys.</span>
+<span class="sd">    xy_axes_options : dict, optional</span>
+<span class="sd">        Keyword arguments to the x-y data axes. Default is ``None``.</span>
+<span class="sd">        Valid keys are legal ``matplotlib.axes.Axes`` kwargs plus projection, which chooses a projection type</span>
+<span class="sd">        for the axes.</span>
+<span class="sd">    xy_plot_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when plotting the data on the x-y data axis. Default is ``None``.</span>
+<span class="sd">        Valid keys are ``matplotlib.lines.Line2D`` properties, e.g. ``alpha``, ``color``, ``label``, etc.</span>
+<span class="sd">    colorbar_options : dict, optional</span>
+<span class="sd">        Keyword arguments to the colorbar axes. Default is ``None``.</span>
+<span class="sd">        Valid keys are legal ``matplotlib.axes.Axes`` kwargs plus projection, which chooses a projection type</span>
+<span class="sd">        for the axes.</span>
+<span class="sd">    point_plot_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when plotting the current data point in the x-y data series on the x-y axes.</span>
+<span class="sd">        If ``None`` is supplied a purple circle is used.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    __call__(i)</span>
+<span class="sd">        Returns the ``i``th figure.</span>
+<span class="sd">    __len__()</span>
+<span class="sd">        Returns the total number of frames to create.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_filenames</span><span class="p">,</span> <span class="n">dic_filenames</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">xy_data</span><span class="p">,</span> <span class="n">figure_width</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">fractional_padding</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+                 <span class="n">overlay_contour_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy_axes_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">xy_plot_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">colorbar_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">point_plot_options</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">dic_filenames</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">),</span> <span class="s2">&quot;The number of images ({}) does not match the &quot;</span> \
+                                                           <span class="s2">&quot;number of DIC files ({}).&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">),</span>
+                                                                                              <span class="nb">len</span><span class="p">(</span><span class="n">dic_filenames</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_filenames</span> <span class="o">=</span> <span class="n">image_filenames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_filenames</span> <span class="o">=</span> <span class="n">dic_filenames</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_num_frames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variable</span> <span class="o">=</span> <span class="n">variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x_data</span> <span class="o">=</span> <span class="n">xy_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y_data</span> <span class="o">=</span> <span class="n">xy_data</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_resolution</span><span class="p">(</span><span class="n">image_filenames</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_height_padding</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span><span class="p">)</span>
+
+        <span class="n">colorbar_lim</span><span class="p">,</span> <span class="n">overlay_lim</span><span class="p">,</span> <span class="n">xy_lim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_axes_limits</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_width</span><span class="p">,</span> <span class="n">fractional_padding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_lim</span> <span class="o">=</span> <span class="n">colorbar_lim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_lim</span> <span class="o">=</span> <span class="n">overlay_lim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xy_lim</span> <span class="o">=</span> <span class="n">xy_lim</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid_spec</span> <span class="o">=</span> <span class="n">GridSpec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height_padding</span><span class="p">,</span> <span class="n">xy_lim</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig_width_in_inches</span> <span class="o">=</span> <span class="n">figure_width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fig_height_in_inches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">/</span> <span class="n">xy_lim</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_width_in_inches</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_init_options</span><span class="p">(</span><span class="n">colorbar_options</span><span class="p">,</span> <span class="n">overlay_contour_options</span><span class="p">,</span> <span class="n">point_plot_options</span><span class="p">,</span> <span class="n">xy_axes_options</span><span class="p">,</span>
+                           <span class="n">xy_plot_options</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_init_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">colorbar_options</span><span class="p">,</span> <span class="n">overlay_contour_options</span><span class="p">,</span> <span class="n">point_plot_options</span><span class="p">,</span> <span class="n">xy_axes_options</span><span class="p">,</span>
+                      <span class="n">xy_plot_options</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">overlay_contour_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">overlay_contour_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s2">&quot;cmap&quot;</span> <span class="ow">in</span> <span class="n">overlay_contour_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="n">overlay_contour_options</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span> <span class="o">=</span> <span class="s2">&quot;viridis&quot;</span>
+            <span class="n">overlay_contour_options</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span>
+        <span class="k">if</span> <span class="s2">&quot;levels&quot;</span> <span class="ow">in</span> <span class="n">overlay_contour_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_levels</span> <span class="o">=</span> <span class="n">overlay_contour_options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;levels&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_levels</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">if</span> <span class="n">overlay_contour_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span> <span class="o">=</span> <span class="n">overlay_contour_options</span>
+        <span class="k">if</span> <span class="n">xy_axes_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xy_axes_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xy_axes_options</span> <span class="o">=</span> <span class="n">xy_axes_options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xy_plot_options</span> <span class="o">=</span> <span class="n">xy_plot_options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_options</span> <span class="o">=</span> <span class="n">colorbar_options</span>
+
+        <span class="k">if</span> <span class="s2">&quot;title&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_options</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_title</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variable</span>
+
+        <span class="k">if</span> <span class="n">point_plot_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span> <span class="o">=</span> <span class="n">point_plot_options</span>
+        <span class="k">if</span> <span class="s2">&quot;marker&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span><span class="p">[</span><span class="s2">&quot;marker&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;o&quot;</span>
+        <span class="k">if</span> <span class="s2">&quot;color&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span><span class="p">[</span><span class="s2">&quot;color&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;#9C27B0&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_backend</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;agg&quot;</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">Figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig_width_in_inches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_height_in_inches</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_fig_width_in_inches</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fig_height_in_inches</span><span class="p">))</span>
+
+        <span class="n">overlay_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_spec</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height_padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">_overlay_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+
+        <span class="n">cbar_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_spec</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height_padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+        <span class="n">cbar_ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_title</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.04</span><span class="p">)</span>
+
+        <span class="n">xy_ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_grid_spec</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">_image_height</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_height_padding</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xy_lim</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_lim</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span>
+            <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_axes_options</span><span class="p">)</span>
+
+        <span class="n">image_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_image_filenames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">dic_filename</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic_filenames</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="n">vmax</span><span class="p">,</span> <span class="n">vmin</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_set_contour_levels</span><span class="p">(</span><span class="n">dic_filename</span><span class="p">)</span>
+
+        <span class="n">plot_overlay</span><span class="p">(</span><span class="n">image_filename</span><span class="p">,</span> <span class="n">load_dic_data</span><span class="p">(</span><span class="n">dic_filename</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">overlay_ax</span><span class="p">,</span> <span class="n">contour_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span><span class="p">)</span>
+        <span class="n">plot_colorbar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">cbar_ax</span><span class="p">,</span> <span class="n">colorbar_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_colorbar_options</span><span class="p">)</span>
+        <span class="n">plot_xy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_data</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y_data</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">xy_ax</span><span class="p">,</span> <span class="n">axes_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_axes_options</span><span class="p">,</span> <span class="n">plot_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_xy_plot_options</span><span class="p">)</span>
+        <span class="n">plot_xy</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_x_data</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_y_data</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">ax</span><span class="o">=</span><span class="n">xy_ax</span><span class="p">,</span> <span class="n">plot_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_point_plot_options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fig</span>
+
+    <span class="k">def</span> <span class="nf">_set_contour_levels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dic_filename</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_levels</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">variable_names</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_variable</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variable</span> <span class="o">!=</span> <span class="s2">&quot;sigma&quot;</span><span class="p">:</span>
+                <span class="n">variable_names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;sigma&quot;</span><span class="p">)</span>
+            <span class="n">dic_data</span> <span class="o">=</span> <span class="n">load_dic_data</span><span class="p">(</span><span class="n">dic_filename</span><span class="p">,</span> <span class="n">variable_names</span><span class="o">=</span><span class="n">variable_names</span><span class="p">)</span>
+            <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_variable</span><span class="p">])</span>
+            <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_variable</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">vmax</span> <span class="o">&gt;</span> <span class="n">vmin</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span><span class="p">[</span><span class="s2">&quot;levels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span><span class="p">[</span><span class="s2">&quot;levels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vmin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_levels</span><span class="p">)</span>
+            <span class="n">vmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_levels</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_overlay_contour_options</span><span class="p">[</span><span class="s2">&quot;levels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_levels</span>
+        <span class="k">return</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">vmin</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_num_frames</span>
+
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_image_resolution</span><span class="p">(</span><span class="n">image_filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the resolution of the specified image.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image_filename : str</span>
+<span class="sd">            Name of image to load.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        (height, width) : (int, int)</span>
+<span class="sd">            Image resolution in pixels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_filename</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">_axes_limits</span><span class="p">(</span><span class="n">image_width</span><span class="p">,</span> <span class="n">fractional_padding</span><span class="o">=</span><span class="mf">0.5</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the widths of each axes object in the frame.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        image_width : int</span>
+<span class="sd">            Width of the overlay background image</span>
+<span class="sd">        fractional_padding : float, optional</span>
+<span class="sd">        Fraction of the image width to pad between the right of the colorbar and the left of the x-y data plot.</span>
+<span class="sd">        Default is ``0.5``</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        colorbar_lim, overlay_lim, xy_lim : List[(int, int)]</span>
+<span class="sd">            Limits for each element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># calculate widths and padding for each item</span>
+        <span class="n">overlay_width</span> <span class="o">=</span> <span class="n">image_width</span>
+        <span class="n">colorbar_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="n">image_width</span><span class="p">)</span>
+        <span class="n">xy_width</span> <span class="o">=</span> <span class="n">image_width</span>
+        <span class="n">overlay_colorbar_padding_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.05</span> <span class="o">*</span> <span class="n">image_width</span><span class="p">)</span>
+        <span class="n">colorbar_xy_padding_width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fractional_padding</span> <span class="o">*</span> <span class="n">image_width</span><span class="p">)</span>
+
+        <span class="c1"># set limits based on item sizes</span>
+        <span class="n">left_lim</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">right_lim</span> <span class="o">=</span> <span class="n">overlay_width</span>
+        <span class="n">overlay_lim</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_lim</span><span class="p">,</span> <span class="n">right_lim</span><span class="p">)</span>
+
+        <span class="n">left_lim</span> <span class="o">=</span> <span class="n">right_lim</span> <span class="o">+</span> <span class="n">overlay_colorbar_padding_width</span>
+        <span class="n">right_lim</span> <span class="o">=</span> <span class="n">left_lim</span> <span class="o">+</span> <span class="n">colorbar_width</span>
+        <span class="n">colorbar_lim</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_lim</span><span class="p">,</span> <span class="n">right_lim</span><span class="p">)</span>
+
+        <span class="n">left_lim</span> <span class="o">=</span> <span class="n">right_lim</span> <span class="o">+</span> <span class="n">colorbar_xy_padding_width</span>
+        <span class="n">right_lim</span> <span class="o">=</span> <span class="n">left_lim</span> <span class="o">+</span> <span class="n">xy_width</span>
+        <span class="n">xy_lim</span> <span class="o">=</span> <span class="p">(</span><span class="n">left_lim</span><span class="p">,</span> <span class="n">right_lim</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">colorbar_lim</span><span class="p">,</span> <span class="n">overlay_lim</span><span class="p">,</span> <span class="n">xy_lim</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

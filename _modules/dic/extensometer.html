@@ -1,0 +1,589 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.extensometer &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.extensometer</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.extensometer</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span><span class="p">,</span> <span class="n">Iterable</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="kn">as</span> <span class="nn">so</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span> <span class="nn">.dic_io</span> <span class="kn">import</span> <span class="n">load_dic_data</span>
+<span class="kn">from</span> <span class="nn">.dic_utils</span> <span class="kn">import</span> <span class="n">point_to_position</span><span class="p">,</span> <span class="n">point_to_indices</span><span class="p">,</span> <span class="n">get_displacement</span><span class="p">,</span> <span class="n">get_initial_position</span>
+<span class="kn">from</span> <span class="nn">.geometry_utils</span> <span class="kn">import</span> <span class="n">norm</span><span class="p">,</span> <span class="n">distance_to</span>
+<span class="kn">from</span> <span class="nn">.plot</span> <span class="kn">import</span> <span class="n">plot_overlay</span>
+<span class="kn">from</span> <span class="nn">.smooth</span> <span class="kn">import</span> <span class="n">smooth</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Extensometer&quot;</span><span class="p">,</span> <span class="s2">&quot;extensometer_length&quot;</span><span class="p">,</span> <span class="s2">&quot;extensometer_transverse_displacement&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;extensometer_strain&quot;</span><span class="p">,</span> <span class="s2">&quot;extensometer_angle&quot;</span><span class="p">,</span> <span class="s2">&quot;extensometer_curvature&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;extensometer_sequence&quot;</span><span class="p">,</span> <span class="s2">&quot;place_extensometers&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Extensometer"><a class="viewcode-back" href="../../dic.html#dic.extensometer.Extensometer">[docs]</a><span class="k">class</span> <span class="nc">Extensometer</span><span class="p">(</span><span class="n">namedtuple</span><span class="p">(</span><span class="s2">&quot;Extensometer&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;pt1&quot;</span><span class="p">,</span> <span class="s2">&quot;pt2&quot;</span><span class="p">])):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    An extensometer that is defined between two points in pixel space.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pt1 : (x, y)</span>
+<span class="sd">        Two-dimensional coordinates of the first pixel in the reference image.</span>
+<span class="sd">    pt2 : (x, y)</span>
+<span class="sd">        Two-dimensional coordinates of the second pixel in the reference image.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="extensometer_length"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_length">[docs]</a><span class="k">def</span> <span class="nf">extensometer_length</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the length of the extensometer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    extensometer : :class:.`Extensometer`</span>
+<span class="sd">        ``(x, y)`` coordinates of the extensometer points in pixel space.</span>
+<span class="sd">    add_displacement : bool, optional</span>
+<span class="sd">        Whether to add displacement to the undeformed position. Default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Length of the extensometer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1_pos</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="o">.</span><span class="n">pt1</span><span class="p">,</span> <span class="n">add_displacement</span><span class="p">)</span>
+    <span class="n">pt2_pos</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="o">.</span><span class="n">pt2</span><span class="p">,</span> <span class="n">add_displacement</span><span class="p">)</span>
+    <span class="n">delta_pos</span> <span class="o">=</span> <span class="n">pt2_pos</span> <span class="o">-</span> <span class="n">pt1_pos</span>
+    <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="extensometer_transverse_displacement"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_transverse_displacement">[docs]</a><span class="k">def</span> <span class="nf">extensometer_transverse_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">,</span> <span class="n">fractional_points</span><span class="o">=</span><span class="mi">10</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the displacement transverse to the deformed end-points of the extensometer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    extensometer : :class:.`Extensometer`</span>
+<span class="sd">        ``(x, y)`` coordinates of the extensometer points in pixel space.</span>
+<span class="sd">    fractional_points : int or List[float], optional</span>
+<span class="sd">        If ``int``, the transverse displacement will be calculated in uniformly spaced intervals</span>
+<span class="sd">        on the interval ``[0, 1]`` with the number of sample points determined by ``fractional_points``.</span>
+<span class="sd">        If ``List[float]``, then the given items in the list will be used directly to compute displacement.</span>
+<span class="sd">        If a ``List`` is given, a value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``</span>
+<span class="sd">        corresponds to ``pt2`` of the extensometer, i.e. the fractional coordinates are the fraction</span>
+<span class="sd">        along the extensometer&#39;s length at which the transverse displacement should be calculated.</span>
+<span class="sd">        Default is ``10``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[float]</span>
+<span class="sd">        List of transverse displacements.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">extensometer</span><span class="o">.</span><span class="n">pt1</span><span class="p">)</span>
+    <span class="n">pt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">extensometer</span><span class="o">.</span><span class="n">pt2</span><span class="p">)</span>
+    <span class="n">pt1_pos</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt1</span><span class="p">)</span>
+    <span class="n">pt2_pos</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt2</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">fractional_points</span><span class="p">,</span> <span class="n">Iterable</span><span class="p">):</span>
+        <span class="n">fractional_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">fractional_points</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">fractional_points</span><span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">fractional_points</span><span class="p">)</span>
+
+    <span class="n">transverse_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fractional_points</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">fractional_points</span><span class="p">):</span>
+        <span class="n">mid_pt</span> <span class="o">=</span> <span class="n">pt1</span> <span class="o">+</span> <span class="p">(</span><span class="n">pt2</span> <span class="o">-</span> <span class="n">pt1</span><span class="p">)</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">mid_pos</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">mid_pt</span><span class="p">)</span>
+        <span class="n">transverse_displacement</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance_to</span><span class="p">(</span><span class="n">mid_pos</span><span class="p">,</span> <span class="n">pt1_pos</span><span class="p">,</span> <span class="n">pt2_pos</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">transverse_displacement</span></div>
+
+
+<div class="viewcode-block" id="extensometer_strain"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_strain">[docs]</a><span class="k">def</span> <span class="nf">extensometer_strain</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the strain between the specified points. Points should be specified by their pixel location.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    extensometer : :class:.`Extensometer`</span>
+<span class="sd">        ``(x, y)`` coordinates of the extensometer points in pixel space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Strain, i.e. ``deformed_length / initial_length - 1.0``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span> <span class="o">=</span> <span class="n">extensometer</span>
+    <span class="n">row1</span><span class="p">,</span> <span class="n">col1</span> <span class="o">=</span> <span class="n">point_to_indices</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt1</span><span class="p">)</span>
+    <span class="n">row2</span><span class="p">,</span> <span class="n">col2</span> <span class="o">=</span> <span class="n">point_to_indices</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt2</span><span class="p">)</span>
+    <span class="n">pos1</span> <span class="o">=</span> <span class="n">get_initial_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">row1</span><span class="p">,</span> <span class="n">col1</span><span class="p">)</span>
+    <span class="n">pos2</span> <span class="o">=</span> <span class="n">get_initial_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">row2</span><span class="p">,</span> <span class="n">col2</span><span class="p">)</span>
+    <span class="n">delta_pos</span> <span class="o">=</span> <span class="n">pos2</span> <span class="o">-</span> <span class="n">pos1</span>
+
+    <span class="n">initial_length</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">delta_pos</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">))</span>
+
+    <span class="n">disp1</span> <span class="o">=</span> <span class="n">get_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">row1</span><span class="p">,</span> <span class="n">col1</span><span class="p">)</span>
+    <span class="n">disp2</span> <span class="o">=</span> <span class="n">get_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">row2</span><span class="p">,</span> <span class="n">col2</span><span class="p">)</span>
+
+    <span class="n">pos1</span> <span class="o">+=</span> <span class="n">disp1</span>
+    <span class="n">pos2</span> <span class="o">+=</span> <span class="n">disp2</span>
+    <span class="n">delta_pos</span> <span class="o">=</span> <span class="n">pos2</span> <span class="o">-</span> <span class="n">pos1</span>
+
+    <span class="n">deformed_length</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">delta_pos</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">deformed_length</span> <span class="o">/</span> <span class="n">initial_length</span> <span class="o">-</span> <span class="mf">1.0</span></div>
+
+
+<div class="viewcode-block" id="extensometer_angle"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_angle">[docs]</a><span class="k">def</span> <span class="nf">extensometer_angle</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the angle (in radians) between the specified extensometer and the x-axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    extensometer : :class:.`Extensometer`</span>
+<span class="sd">        ``(x, y)`` coordinates of the extensometer points in pixel space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Angle in radians.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span> <span class="o">=</span> <span class="n">extensometer</span>
+    <span class="n">pos1</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt1</span><span class="p">)</span>
+    <span class="n">pos2</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">pt2</span><span class="p">)</span>
+    <span class="n">delta_pos</span> <span class="o">=</span> <span class="n">pos2</span> <span class="o">-</span> <span class="n">pos1</span>
+    <span class="n">deformed_length</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">delta_pos</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">))</span>
+
+    <span class="n">x_axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+    <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_pos</span><span class="p">,</span> <span class="n">x_axis</span><span class="p">)</span> <span class="o">/</span> <span class="n">deformed_length</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">))</span></div>
+
+
+<span class="k">def</span> <span class="nf">_distance_from_center</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the distance of each 2D point from the ``center = (x_center, y_center)``</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    center: (T, T)</span>
+<span class="sd">        Two-dimensional data point ``(x, y)`` corresponding to the center of the circle.</span>
+<span class="sd">    x : T, List[T]</span>
+<span class="sd">        Point or list of ``x`` data points to calculate the distance to.</span>
+<span class="sd">    y : T, List[T]</span>
+<span class="sd">        Point or list of ``y`` data points to calculate the distance to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[float]</span>
+<span class="sd">        List of distances from the center point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span> <span class="o">=</span> <span class="n">center</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">x_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">y_center</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_leastsq_circle_objective</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the algebraic distance from the ``(x, y)`` data points</span>
+<span class="sd">    and the mean circle centered at ``center = (x_center, y_center)``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    center: (T, T)</span>
+<span class="sd">        Two-dimensional data point ``(x, y)`` corresponding to the center of the circle.</span>
+<span class="sd">    x : T, List[T]</span>
+<span class="sd">        Point or list of ``x`` data points to calculate the distance to.</span>
+<span class="sd">    y : T, List[T]</span>
+<span class="sd">        Point or list of ``y`` data points to calculate the distance to.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[float]</span>
+<span class="sd">        List of distances.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">radii</span> <span class="o">=</span> <span class="n">_distance_from_center</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">radii</span> <span class="o">-</span> <span class="n">radii</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">_fit_leastsq_circle</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fits a circle to the given dataset.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : List[T]</span>
+<span class="sd">        x data points.</span>
+<span class="sd">    y : List[T]</span>
+<span class="sd">        y data points</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (x_center, y_center, radius, residual) : (float, float, float, float)</span>
+<span class="sd">        Parameters and residual of the circular fit.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># coordinates of the barycenter form the initial guess</span>
+    <span class="n">x_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">y_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">center_estimate</span> <span class="o">=</span> <span class="n">x_mean</span><span class="p">,</span> <span class="n">y_mean</span>
+
+    <span class="n">center</span><span class="p">,</span> <span class="n">ier</span> <span class="o">=</span> <span class="n">so</span><span class="o">.</span><span class="n">leastsq</span><span class="p">(</span><span class="n">_leastsq_circle_objective</span><span class="p">,</span> <span class="n">center_estimate</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+    <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span> <span class="o">=</span> <span class="n">center</span>
+    <span class="n">radii</span> <span class="o">=</span> <span class="n">_distance_from_center</span><span class="p">(</span><span class="n">center</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">mean_radius</span> <span class="o">=</span> <span class="n">radii</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="n">radii</span> <span class="o">-</span> <span class="n">mean_radius</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">,</span> <span class="n">mean_radius</span><span class="p">,</span> <span class="n">residual</span>
+
+
+<div class="viewcode-block" id="extensometer_curvature"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_curvature">[docs]</a><span class="k">def</span> <span class="nf">extensometer_curvature</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the curvature of the given extensometer. Curvature is calculated</span>
+<span class="sd">    by fitting a circle to the data points that are within a distance of</span>
+<span class="sd">    +/- ``extensometer_length / 4`` of the point with the maximum</span>
+<span class="sd">    transverse displacement.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    extensometer : :class:.`Extensometer`</span>
+<span class="sd">        ``(x, y)`` coordinates of the extensometer points in pixel space.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Curvature.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># sample 50 points along the extensometer</span>
+    <span class="n">num_points</span> <span class="o">=</span> <span class="mi">50</span>
+    <span class="n">fractional_points</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">num_points</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">extensometer_length</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">transverse_displacement</span> <span class="o">=</span> <span class="n">extensometer_transverse_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">,</span> <span class="n">fractional_points</span><span class="p">)</span>
+    <span class="n">masked_transverse_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">transverse_displacement</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">masked_transverse_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">smooth</span><span class="p">(</span><span class="n">masked_transverse_displacement</span><span class="p">))</span>
+    <span class="n">max_disp_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">masked_transverse_displacement</span><span class="p">)</span>
+
+    <span class="c1"># number of indices that correspond to a distance of L / 4</span>
+    <span class="c1"># where L = extensometer length</span>
+    <span class="n">quarter_idx</span> <span class="o">=</span> <span class="n">num_points</span> <span class="o">//</span> <span class="mi">4</span>
+
+    <span class="c1"># get the indices of the points that are +/- L/4 away from the</span>
+    <span class="c1"># maximum displacement. Bound indices on the range [0, num_points]</span>
+    <span class="n">right_idx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">num_points</span><span class="p">,</span> <span class="n">max_disp_idx</span> <span class="o">+</span> <span class="n">quarter_idx</span><span class="p">)</span>
+    <span class="n">left_idx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_disp_idx</span> <span class="o">-</span> <span class="n">quarter_idx</span><span class="p">)</span>
+
+    <span class="c1"># extract the (x, y) data that will be used for the circular fit</span>
+    <span class="n">x_circular</span> <span class="o">=</span> <span class="n">length</span> <span class="o">*</span> <span class="n">fractional_points</span><span class="p">[</span><span class="n">left_idx</span><span class="p">:</span><span class="n">right_idx</span><span class="p">]</span>
+    <span class="n">y_circular</span> <span class="o">=</span> <span class="n">masked_transverse_displacement</span><span class="p">[</span><span class="n">left_idx</span><span class="p">:</span><span class="n">right_idx</span><span class="p">]</span>
+
+    <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">residual</span> <span class="o">=</span> <span class="n">_fit_leastsq_circle</span><span class="p">(</span><span class="n">x_circular</span><span class="p">,</span> <span class="n">y_circular</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">radius</span></div>
+
+
+<div class="viewcode-block" id="extensometer_sequence"><a class="viewcode-back" href="../../dic.html#dic.extensometer.extensometer_sequence">[docs]</a><span class="k">def</span> <span class="nf">extensometer_sequence</span><span class="p">(</span><span class="n">dic_filenames</span><span class="p">,</span> <span class="n">extensometers</span><span class="p">,</span> <span class="n">metric</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Processing extensometers&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extracts the specified metric from the extensometers for all DIC files.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_filenames : str</span>
+<span class="sd">        Names of DIC files to analyze.</span>
+<span class="sd">    extensometers : List[:class:`.Extensometer`]</span>
+<span class="sd">        List of extensometers to</span>
+<span class="sd">    metric : callable</span>
+<span class="sd">        A callable object that provides the signature ``metric(dict, Extensometer) -&gt; float``, i.e. takes as input</span>
+<span class="sd">        a ``dict`` of dic_data and an :class:`.Extensometer` and returns a ``float``.</span>
+<span class="sd">    description : str, optional</span>
+<span class="sd">        Description of the computation that will be printed along with the progress bar.</span>
+<span class="sd">        Default is ``&quot;Processing extensometers&quot;``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        Array of size ``len(dic_filenames)`` by ``len(extensometers)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_dic_filenames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dic_filenames</span><span class="p">)</span>
+    <span class="n">num_extensometers</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">extensometers</span><span class="p">)</span>
+    <span class="n">extensometer_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_dic_filenames</span><span class="p">,</span> <span class="n">num_extensometers</span><span class="p">))</span>
+
+    <span class="n">args</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">dic_filenames</span><span class="p">,</span>
+        <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">extensometers</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">),</span>
+        <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">metric</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tqdm</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">imap</span><span class="p">(</span><span class="n">_extensometer_sequence_worker</span><span class="p">,</span> <span class="n">args</span><span class="p">),</span>
+                                 <span class="n">total</span><span class="o">=</span><span class="n">num_dic_filenames</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">description</span><span class="p">)):</span>
+        <span class="n">extensometer_data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">row</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">extensometer_data</span></div>
+
+
+<span class="k">def</span> <span class="nf">_extensometer_sequence_worker</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Worker for extracting the extensometer metric from a single DIC data file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    args : (str, List[:class:`.Extensometer`], callable)</span>
+<span class="sd">        Tuple of arguments needed for each calculation, i.e. ``(dic_filename, extensometers, metric)``.</span>
+
+<span class="sd">    returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[float]</span>
+<span class="sd">        The provided metric calculated for each extensometer.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dic_filename</span><span class="p">,</span> <span class="n">extensometers</span><span class="p">,</span> <span class="n">metric</span> <span class="o">=</span> <span class="n">args</span>
+    <span class="n">dic_data</span> <span class="o">=</span> <span class="n">load_dic_data</span><span class="p">(</span><span class="n">dic_filename</span><span class="p">,</span> <span class="n">variable_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="s2">&quot;Y&quot;</span><span class="p">,</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="s2">&quot;U&quot;</span><span class="p">,</span> <span class="s2">&quot;V&quot;</span><span class="p">,</span> <span class="s2">&quot;W&quot;</span><span class="p">,</span> <span class="s2">&quot;sigma&quot;</span><span class="p">))</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">extensometer</span> <span class="ow">in</span> <span class="n">extensometers</span><span class="p">:</span>
+        <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metric</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">extensometer</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">output</span>
+
+
+<div class="viewcode-block" id="place_extensometers"><a class="viewcode-back" href="../../dic.html#dic.extensometer.place_extensometers">[docs]</a><span class="k">def</span> <span class="nf">place_extensometers</span><span class="p">(</span><span class="n">reference_image_filename</span><span class="p">,</span> <span class="n">reference_dic_filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Places extensometers on the given set of reference data. Clicking the figure will add a point. Adding two points</span>
+<span class="sd">    will create an extensometer.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    reference_image_filename : str</span>
+<span class="sd">        Name of the file containing the reference image, e.g. the first image of the DIC data.</span>
+<span class="sd">    reference_dic_filename : str</span>
+<span class="sd">        Name of the file containing the reference DIC data, e.g. the DIC data calculated from the reference image.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[:class:`.Extensometer`]</span>
+<span class="sd">        List of extensometers added by the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plot_overlay</span><span class="p">(</span><span class="n">reference_image_filename</span><span class="p">,</span> <span class="n">load_dic_data</span><span class="p">(</span><span class="n">reference_dic_filename</span><span class="p">),</span> <span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+    <span class="n">current_extensometer_points</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">extensometers</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Left click to add point&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">on_click</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="o">.</span><span class="n">inaxes</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">current_extensometer_points</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">event</span><span class="o">.</span><span class="n">xdata</span><span class="p">],</span> <span class="p">[</span><span class="n">event</span><span class="o">.</span><span class="n">ydata</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">current_extensometer_points</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">pt2</span> <span class="o">=</span> <span class="n">current_extensometer_points</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">pt1</span> <span class="o">=</span> <span class="n">current_extensometer_points</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">extensometers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Extensometer</span><span class="p">(</span><span class="n">pt1</span><span class="o">=</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="o">=</span><span class="n">pt2</span><span class="p">))</span>
+            <span class="n">xdata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">ydata</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt1</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt2</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">xdata</span><span class="p">,</span> <span class="n">ydata</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;#F44336&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+
+    <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;button_press_event&#39;</span><span class="p">,</span> <span class="n">on_click</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">extensometers</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

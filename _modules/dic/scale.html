@@ -1,0 +1,249 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.scale &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.scale</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.scale</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;px_per_mm&quot;</span><span class="p">,</span> <span class="s2">&quot;mm_per_px&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="px_per_mm"><a class="viewcode-back" href="../../dic.html#dic.scale.px_per_mm">[docs]</a><span class="k">def</span> <span class="nf">px_per_mm</span><span class="p">(</span><span class="n">dic_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the average pixels per millimeter.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">        The dictionary must contain the keys ``x``, ``y``, ``X`` and ``Y``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Pixels per millimeter.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># x, y [px] data is not masked. Remove uncorrelated regions before</span>
+    <span class="c1"># calculating delta:</span>
+    <span class="n">valid_data_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">valid_x</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="n">valid_data_mask</span><span class="p">]</span>
+    <span class="n">valid_y</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][</span><span class="n">valid_data_mask</span><span class="p">]</span>
+
+    <span class="n">valid_dx</span> <span class="o">=</span> <span class="n">valid_x</span> <span class="o">-</span> <span class="n">valid_x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">valid_dy</span> <span class="o">=</span> <span class="n">valid_y</span> <span class="o">-</span> <span class="n">valid_y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">valid_X</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;X&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+    <span class="n">valid_Y</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;Y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">compressed</span><span class="p">()</span>
+
+    <span class="n">valid_dX</span> <span class="o">=</span> <span class="n">valid_X</span> <span class="o">-</span> <span class="n">valid_X</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">valid_dY</span> <span class="o">=</span> <span class="n">valid_Y</span> <span class="o">-</span> <span class="n">valid_Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">length_px</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">valid_dx</span><span class="p">,</span> <span class="n">valid_dx</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">valid_dy</span><span class="p">,</span> <span class="n">valid_dy</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">length_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">valid_dX</span><span class="p">,</span> <span class="n">valid_dX</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="n">valid_dY</span><span class="p">,</span> <span class="n">valid_dY</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">length_px</span> <span class="o">/</span> <span class="n">length_mm</span></div>
+
+
+<div class="viewcode-block" id="mm_per_px"><a class="viewcode-back" href="../../dic.html#dic.scale.mm_per_px">[docs]</a><span class="k">def</span> <span class="nf">mm_per_px</span><span class="p">(</span><span class="n">dic_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the average millimeters per pixel.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">        The dictionary must contain the keys ``x``, ``y``, ``X`` and ``Y``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    flost</span>
+<span class="sd">        Millimeters per pixel.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">px_per_mm</span><span class="p">(</span><span class="n">dic_data</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

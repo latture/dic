@@ -1,0 +1,438 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.variables &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.variables</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.variables</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">acos</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.dic_utils</span> <span class="kn">import</span> <span class="n">point_to_indices</span><span class="p">,</span> <span class="n">point_to_position</span><span class="p">,</span> <span class="n">get_initial_position</span><span class="p">,</span> <span class="n">get_displacement</span>
+<span class="kn">from</span> <span class="nn">.geometry_utils</span> <span class="kn">import</span> <span class="n">apply_rotation</span><span class="p">,</span> <span class="n">apply_transformation</span><span class="p">,</span> <span class="n">distance_between</span><span class="p">,</span> \
+                            <span class="n">distance_to</span><span class="p">,</span> <span class="n">get_angle</span><span class="p">,</span> <span class="n">get_transformation_matrix</span><span class="p">,</span> <span class="n">norm</span><span class="p">,</span> <span class="n">cross3d</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;add_transverse_displacement&quot;</span><span class="p">]</span>
+
+
+<span class="k">def</span> <span class="nf">_get_node_mask</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">radius</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Gets the mask to be applied to the correlated data (represented as masked arrays)</span>
+<span class="sd">    from the combination of the current mask and the removed data near the nodal locations.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data (usually loaded from a ``.mat`` file).</span>
+<span class="sd">    nodes : List[List[int, int]]</span>
+<span class="sd">        Two-dimensional list of ``(x, y)`` nodal location. Units should be in pixels</span>
+<span class="sd">        and given with respect to the global pixel coordinate, i.e. the pixel location</span>
+<span class="sd">        in the reference camera image.</span>
+<span class="sd">    radius : int</span>
+<span class="sd">        Radius of the nodes in pixels.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray(dtype=bool)``</span>
+<span class="sd">        Updated mask.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">old_mask</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span>
+    <span class="n">new_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old_mask</span><span class="p">)</span>
+    <span class="n">global_x_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">global_y_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+        <span class="n">x_px</span><span class="p">,</span> <span class="n">y_px</span> <span class="o">=</span> <span class="n">node</span>
+        <span class="n">local_x_indices</span> <span class="o">=</span> <span class="n">global_x_indices</span> <span class="o">-</span> <span class="n">x_px</span>
+        <span class="n">local_y_indices</span> <span class="o">=</span> <span class="n">global_y_indices</span> <span class="o">-</span> <span class="n">y_px</span>
+        <span class="n">current_node_mask</span> <span class="o">=</span> <span class="n">local_x_indices</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">local_y_indices</span><span class="o">**</span><span class="mi">2</span> <span class="o">&lt;=</span> <span class="n">radius</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">new_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mask_or</span><span class="p">(</span><span class="n">new_mask</span><span class="p">,</span> <span class="n">current_node_mask</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">new_mask</span>
+
+
+<span class="k">def</span> <span class="nf">_get_elem_lut</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="n">strut_radius</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Associates regions of the correlated dataset with the appropriate strut direction.</span>
+<span class="sd">    Each ``(i, j)`` index in the returned lookup table corresponds to an ``int`` that</span>
+<span class="sd">    represents the element index the data point belongs to. If no element is associated</span>
+<span class="sd">    with a data point, the ``(i, j)`` index that data point will be masked.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    nodes : List[(T, T)]</span>
+<span class="sd">        List of ``(x, y)`` nodal coordinates in pixel space.</span>
+<span class="sd">    elems : List[(int, int)]</span>
+<span class="sd">        List of indices into ``nodes``</span>
+<span class="sd">    strut_radius : int</span>
+<span class="sd">        Radius of each strut in pixels.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ma.MaskedArray(dtype=int)``</span>
+<span class="sd">        Lookup table mapping an index ``(i, j)`` in the DIC data to the element index.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">elem_lut</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span> <span class="o">=</span> <span class="n">elem_lut</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span>
+
+    <span class="c1"># dy is constant because strut radius is fixed for all struts:</span>
+    <span class="n">bounding_box_dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="n">strut_radius</span><span class="p">,</span> <span class="n">strut_radius</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">elem</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elems</span><span class="p">):</span>
+        <span class="n">nn_1</span><span class="p">,</span> <span class="n">nn_2</span> <span class="o">=</span> <span class="n">elem</span>
+        <span class="n">node_1</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">nn_2</span><span class="p">]</span>
+        <span class="n">node_2</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">nn_1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">node_1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">node_2</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">node_1</span><span class="p">,</span> <span class="n">node_2</span> <span class="o">=</span> <span class="n">node_2</span><span class="p">,</span> <span class="n">node_1</span>
+
+        <span class="n">node_1_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">point_to_indices</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">node_1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+        <span class="n">node_2_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">point_to_indices</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">node_2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+
+        <span class="c1"># check that both nodal locations are correlated</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mask</span><span class="p">[</span><span class="n">node_1_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node_1_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">mask</span><span class="p">[</span><span class="n">node_2_idx</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">node_2_idx</span><span class="p">[</span><span class="mi">1</span><span class="p">]]:</span>
+
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">get_angle</span><span class="p">(</span><span class="n">node_1_idx</span><span class="p">,</span> <span class="n">node_2_idx</span><span class="p">)</span>
+            <span class="n">length</span> <span class="o">=</span> <span class="n">distance_between</span><span class="p">(</span><span class="n">node_1_idx</span><span class="p">,</span> <span class="n">node_2_idx</span><span class="p">)</span>
+            <span class="n">offset</span> <span class="o">=</span> <span class="n">node_1_idx</span>
+
+            <span class="n">bounding_box_dx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dx</span> <span class="ow">in</span> <span class="n">bounding_box_dx</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">dy</span> <span class="ow">in</span> <span class="n">bounding_box_dy</span><span class="p">:</span>
+                    <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">apply_rotation</span><span class="p">(</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+                    <span class="n">row</span> <span class="o">+=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">col</span> <span class="o">+=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">row</span> <span class="o">&lt;</span> <span class="n">num_rows</span> <span class="ow">and</span> <span class="n">col</span> <span class="o">&lt;</span> <span class="n">num_cols</span><span class="p">:</span>
+                        <span class="n">elem_lut</span><span class="p">[</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">elem_lut</span> <span class="o">&lt;</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">elem_lut</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_elem_positions</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the location (in mm) of each element endpoint.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    nodes : List[(T, T)]</span>
+<span class="sd">        List of ``(x, y)`` nodal coordinates in pixel space.</span>
+<span class="sd">    elems : List[(int, int)]</span>
+<span class="sd">        List of indices into ``nodes``</span>
+<span class="sd">    add_displacement : bool, optional</span>
+<span class="sd">        Whether to add deformation to the undeformed position. Default is ``True``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray(dtype=float)``</span>
+<span class="sd">        Array of displaced locations. The shape is ``(len(elems), 2, 3)``.</span>
+<span class="sd">        The last dimension contains the ``(x, y, z)`` location (in mm) of</span>
+<span class="sd">        the point.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">elems</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">elems</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int</span><span class="p">)</span>
+    <span class="n">elem_pos_px</span> <span class="o">=</span> <span class="n">nodes</span><span class="p">[</span><span class="n">elems</span><span class="p">]</span>
+    <span class="n">num_elems</span><span class="p">,</span> <span class="n">nodes_per_elem</span><span class="p">,</span> <span class="n">point_dimensionality</span> <span class="o">=</span> <span class="n">elem_pos_px</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">elem_pos_mm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_elems</span><span class="p">,</span> <span class="n">nodes_per_elem</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">node_1</span><span class="p">,</span> <span class="n">node_2</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">elem_pos_px</span><span class="p">):</span>
+        <span class="n">elem_pos_mm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">node_1</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="n">add_displacement</span><span class="p">)</span>
+        <span class="n">elem_pos_mm</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">point_to_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">node_2</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="n">add_displacement</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">elem_pos_mm</span>
+
+
+<span class="k">def</span> <span class="nf">_get_elem_transformation_matrix</span><span class="p">(</span><span class="n">initial_elem_position</span><span class="p">,</span> <span class="n">deformed_elem_position</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the 4x4 transformation matrix that maps a point in the undeformed</span>
+<span class="sd">    space to the corresponding point in the deformed coordinate space.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    initial_elem_position : (pt1, pt2)</span>
+<span class="sd">        Initial end points of the element. End points should be in the form</span>
+<span class="sd">        ``((x1, y1, z1), (x2, y2, z2))``.</span>
+<span class="sd">    deformed_elem_position : (pt1, pt2)</span>
+<span class="sd">        End points of the deformed element. End points should be in the form</span>
+<span class="sd">        ``((x1, y1, z1), (x2, y2, z2))``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        4x4 transformation matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1_0</span><span class="p">,</span> <span class="n">pt2_0</span> <span class="o">=</span> <span class="n">initial_elem_position</span>
+    <span class="n">pt1_1</span><span class="p">,</span> <span class="n">pt2_1</span> <span class="o">=</span> <span class="n">deformed_elem_position</span>
+
+    <span class="n">delta_0</span> <span class="o">=</span> <span class="n">pt2_0</span> <span class="o">-</span> <span class="n">pt1_0</span>
+    <span class="n">length_0</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">delta_0</span><span class="p">)</span>
+
+    <span class="n">delta_1</span> <span class="o">=</span> <span class="n">pt2_1</span> <span class="o">-</span> <span class="n">pt1_1</span>
+    <span class="n">length_1</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">delta_1</span><span class="p">)</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">cross3d</span><span class="p">(</span><span class="n">delta_0</span><span class="p">,</span> <span class="n">delta_1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">])):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">)</span>
+    <span class="n">theta</span> <span class="o">=</span> <span class="n">acos</span><span class="p">(</span><span class="n">delta_0</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">length_0</span> <span class="o">*</span> <span class="n">length_1</span><span class="p">))</span>
+
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">length_1</span> <span class="o">/</span> <span class="n">length_0</span>
+    <span class="n">translation</span> <span class="o">=</span> <span class="n">pt1_1</span> <span class="o">-</span> <span class="n">pt1_0</span>
+
+    <span class="k">return</span> <span class="n">get_transformation_matrix</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_get_elem_transformation_matrices</span><span class="p">(</span><span class="n">initial_elem_positions</span><span class="p">,</span> <span class="n">deformed_elem_positions</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the transformation matrix that maps from initial to deformed position</span>
+<span class="sd">    for each element in the list of positions.</span>
+
+<span class="sd">    initial_elem_positions : List[(pt1, pt2)]</span>
+<span class="sd">        List of initial (undeformed) element positions. Positions should be</span>
+<span class="sd">        in the form ``((pt1, pt2), ...)`` where each ``pt`` is a set of</span>
+<span class="sd">        ``(x, y, z)`` coordinates of type ``(float, float, float)``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">num_elems</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">initial_elem_positions</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="n">num_elems</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">deformed_elem_positions</span><span class="p">),</span> <span class="s2">&quot;The number of initial and deformed elements are not equal.&quot;</span>
+    <span class="n">transformation_matrices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">num_elems</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">initial_elem_position</span><span class="p">,</span> <span class="n">deformed_elem_position</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">initial_elem_positions</span><span class="p">,</span> <span class="n">deformed_elem_positions</span><span class="p">)):</span>
+        <span class="n">transformation_matrices</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_get_elem_transformation_matrix</span><span class="p">(</span><span class="n">initial_elem_position</span><span class="p">,</span> <span class="n">deformed_elem_position</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">transformation_matrices</span>
+
+
+<div class="viewcode-block" id="add_transverse_displacement"><a class="viewcode-back" href="../../dic.html#dic.variables.add_transverse_displacement">[docs]</a><span class="k">def</span> <span class="nf">add_transverse_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="n">strut_radius</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adds the ``transverse_displacement`` key to the DIC data. Transverse displacement is</span>
+<span class="sd">    defined as displacement perpendicular to the strut axis. Data near the nodal regions</span>
+<span class="sd">    is removed from the correlated data. Strut axis is determined by the data points that</span>
+<span class="sd">    are within +/- the strut radius along the vector between nodal locations. DIC data</span>
+<span class="sd">    is updated in-place.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data.</span>
+<span class="sd">    nodes : List[(T, T)]</span>
+<span class="sd">        List of ``(x, y)`` nodal coordinates in pixel space.</span>
+<span class="sd">    elems : List[(int, int)]</span>
+<span class="sd">        List of indices into ``nodes``</span>
+<span class="sd">    strut_radius : int</span>
+<span class="sd">        Radius of each strut in pixels.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        DIC data with transverse displacement added.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">node_mask</span> <span class="o">=</span> <span class="n">_get_node_mask</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">strut_radius</span><span class="p">)</span>
+    <span class="n">elem_lut</span> <span class="o">=</span> <span class="n">_get_elem_lut</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="n">strut_radius</span><span class="p">)</span>
+    <span class="n">combined_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mask_or</span><span class="p">(</span><span class="n">node_mask</span><span class="p">,</span> <span class="n">elem_lut</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span>
+    <span class="n">initial_elem_pos</span> <span class="o">=</span> <span class="n">_get_elem_positions</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">,</span> <span class="n">add_displacement</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="n">deformed_elem_pos</span> <span class="o">=</span> <span class="n">_get_elem_positions</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">elems</span><span class="p">)</span>
+    <span class="n">elem_transformation_matrices</span> <span class="o">=</span> <span class="n">_get_elem_transformation_matrices</span><span class="p">(</span><span class="n">initial_elem_pos</span><span class="p">,</span> <span class="n">deformed_elem_pos</span><span class="p">)</span>
+
+    <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="n">combined_mask</span>
+
+    <span class="n">transverse_displacement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;sigma&quot;</span><span class="p">])</span>
+
+    <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">logical_not</span><span class="p">(</span><span class="n">combined_mask</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+        <span class="n">elem_idx</span> <span class="o">=</span> <span class="n">elem_lut</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="n">elem_transformation_matrices</span><span class="p">[</span><span class="n">elem_idx</span><span class="p">]</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">initial_elem_pos</span><span class="p">[</span><span class="n">elem_idx</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">pt0_initial</span> <span class="o">=</span> <span class="n">get_initial_position</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">pt0_transformed</span> <span class="o">=</span> <span class="n">apply_transformation</span><span class="p">(</span><span class="n">pt0_initial</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+
+        <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span> <span class="o">=</span> <span class="n">deformed_elem_pos</span><span class="p">[</span><span class="n">elem_idx</span><span class="p">]</span>
+        <span class="n">pt0</span> <span class="o">=</span> <span class="n">pt0_initial</span> <span class="o">+</span> <span class="n">get_displacement</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+        <span class="n">transverse_displacement</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">distance_to</span><span class="p">(</span><span class="n">pt0</span><span class="p">,</span> <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">)</span> <span class="o">-</span> <span class="n">distance_to</span><span class="p">(</span><span class="n">pt0_transformed</span><span class="p">,</span> <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">))</span>
+
+    <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;transverse_displacement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">transverse_displacement</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">combined_mask</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dic_data</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

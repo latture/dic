@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.geometry_utils &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.geometry_utils</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.geometry_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">acos</span><span class="p">,</span> <span class="n">cos</span><span class="p">,</span> <span class="n">sin</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">jit</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;norm&quot;</span><span class="p">,</span> <span class="s2">&quot;apply_rotation&quot;</span><span class="p">,</span> <span class="s2">&quot;distance_between&quot;</span><span class="p">,</span> <span class="s2">&quot;distance_to&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;get_angle&quot;</span><span class="p">,</span> <span class="s2">&quot;get_transformation_matrix&quot;</span><span class="p">,</span> <span class="s2">&quot;apply_transformation&quot;</span><span class="p">,</span> <span class="s2">&quot;cross3d&quot;</span><span class="p">]</span>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="norm"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.norm">[docs]</a><span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the norm of a vector.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : array_like</span>
+<span class="sd">        Input vector.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Norm of the vector.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="cross3d"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.cross3d">[docs]</a><span class="k">def</span> <span class="nf">cross3d</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the cross product between two 3D vectors.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    a : array_like</span>
+<span class="sd">        ``(x, y, z)`` components of the first vector.</span>
+
+<span class="sd">    b : array_like</span>
+<span class="sd">        ``(x, y, z)`` components of the second vector.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        Vector cross product.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span></div>
+
+
+<span class="nd">@jit</span>
+<div class="viewcode-block" id="apply_rotation"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.apply_rotation">[docs]</a><span class="k">def</span> <span class="nf">apply_rotation</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">theta</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Rotates the given ``(x, y)`` indices by an amount ``theta``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : int</span>
+<span class="sd">        Coordinate with respect to the x-axis.</span>
+<span class="sd">    y : int</span>
+<span class="sd">        Coordinate with respect to the y-axis.</span>
+<span class="sd">    theta : T</span>
+<span class="sd">        Angle in radians.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (x_new, y_new) : (int, int)</span>
+<span class="sd">        Rotated coordinates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
+    <span class="n">x_new</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">c</span> <span class="o">-</span> <span class="n">y</span> <span class="o">*</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">y_new</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">s</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">y_new</span></div>
+
+
+<div class="viewcode-block" id="distance_between"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.distance_between">[docs]</a><span class="k">def</span> <span class="nf">distance_between</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the distance between the given points.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pt1 : List[T]</span>
+<span class="sd">        Coordinate of the first point.</span>
+<span class="sd">    pt2 : List[T]</span>
+<span class="sd">        Coordinate of the second point.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Distance</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pt1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pt1</span><span class="p">)</span>
+    <span class="n">pt2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">pt2</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">pt2</span> <span class="o">-</span> <span class="n">pt1</span>
+    <span class="k">return</span> <span class="n">norm</span><span class="p">(</span><span class="n">delta</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="distance_to"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.distance_to">[docs]</a><span class="k">def</span> <span class="nf">distance_to</span><span class="p">(</span><span class="n">pt0</span><span class="p">,</span> <span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Computes the distance between ``pt0`` and the line that passes through</span>
+<span class="sd">    ``pt1`` and ``pt2``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pt0 : ``numpy.ndarray``</span>
+<span class="sd">        Point to calculate distance to.</span>
+<span class="sd">    pt1 : ``numpy.ndarray``</span>
+<span class="sd">        First point that defines the line.</span>
+<span class="sd">    pt2 : ``numpy.ndarray``</span>
+<span class="sd">        Second point that defines the line.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Distance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">d_21</span> <span class="o">=</span> <span class="n">pt2</span> <span class="o">-</span> <span class="n">pt1</span>
+    <span class="n">d_10</span> <span class="o">=</span> <span class="n">pt1</span> <span class="o">-</span> <span class="n">pt0</span>
+    <span class="n">l_21</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">d_21</span><span class="p">)</span>
+    <span class="n">l_21_10</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">cross3d</span><span class="p">(</span><span class="n">d_21</span><span class="p">,</span> <span class="n">d_10</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">l_21_10</span> <span class="o">/</span> <span class="n">l_21</span></div>
+
+
+<div class="viewcode-block" id="get_angle"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.get_angle">[docs]</a><span class="k">def</span> <span class="nf">get_angle</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the angle between the given two-dimensional points and the x-axis.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pt1 : List[T]</span>
+<span class="sd">        (x, y) coordinate of the first point.</span>
+<span class="sd">    pt2 : List[T]</span>
+<span class="sd">        (x, y) coordinate of the second point.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    float</span>
+<span class="sd">        Angle in radians.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">pt2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pt1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="n">distance_between</span><span class="p">(</span><span class="n">pt1</span><span class="p">,</span> <span class="n">pt2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">acos</span><span class="p">(</span><span class="n">dx</span> <span class="o">/</span> <span class="n">length</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_transformation_matrix"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.get_transformation_matrix">[docs]</a><span class="k">def</span> <span class="nf">get_transformation_matrix</span><span class="p">(</span><span class="n">axis</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">translation</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the 4x4 transformation matrix that applies the specified</span>
+<span class="sd">    scale, translation, and rotation.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    axis : array_like</span>
+<span class="sd">        Axis of rotation.</span>
+<span class="sd">    theta : float</span>
+<span class="sd">        Angle of rotation in radians.</span>
+<span class="sd">    translation : array_like</span>
+<span class="sd">        Translation vector.</span>
+<span class="sd">    scale : float</span>
+<span class="sd">        Uniform scale factor.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        4x4 transformation matrix.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">axis</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">axis</span> <span class="o">/=</span> <span class="n">norm</span><span class="p">(</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">cos</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span> <span class="o">=</span> <span class="o">-</span><span class="n">axis</span> <span class="o">*</span> <span class="n">sin</span><span class="p">(</span><span class="n">theta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">aa</span><span class="p">,</span> <span class="n">bb</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">dd</span> <span class="o">=</span> <span class="n">a</span><span class="o">*</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="o">*</span><span class="n">d</span>
+    <span class="n">bc</span><span class="p">,</span> <span class="n">ad</span><span class="p">,</span> <span class="n">ac</span><span class="p">,</span> <span class="n">ab</span><span class="p">,</span> <span class="n">bd</span><span class="p">,</span> <span class="n">cd</span> <span class="o">=</span> <span class="n">b</span><span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">a</span><span class="o">*</span><span class="n">c</span><span class="p">,</span> <span class="n">a</span><span class="o">*</span><span class="n">b</span><span class="p">,</span> <span class="n">b</span><span class="o">*</span><span class="n">d</span><span class="p">,</span> <span class="n">c</span><span class="o">*</span><span class="n">d</span>
+    <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">,</span> <span class="n">tz</span> <span class="o">=</span> <span class="n">translation</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">aa</span><span class="o">+</span><span class="n">bb</span><span class="o">-</span><span class="n">cc</span><span class="o">-</span><span class="n">dd</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">bc</span><span class="o">+</span><span class="n">ad</span><span class="p">),</span>   <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">bd</span><span class="o">-</span><span class="n">ac</span><span class="p">),</span>   <span class="n">tx</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">bc</span><span class="o">-</span><span class="n">ad</span><span class="p">),</span>   <span class="n">aa</span><span class="o">+</span><span class="n">cc</span><span class="o">-</span><span class="n">bb</span><span class="o">-</span><span class="n">dd</span><span class="p">,</span> <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cd</span><span class="o">+</span><span class="n">ab</span><span class="p">),</span>   <span class="n">ty</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">bd</span><span class="o">+</span><span class="n">ac</span><span class="p">),</span>   <span class="mi">2</span><span class="o">*</span><span class="p">(</span><span class="n">cd</span><span class="o">-</span><span class="n">ab</span><span class="p">),</span>   <span class="n">aa</span><span class="o">+</span><span class="n">dd</span><span class="o">-</span><span class="n">bb</span><span class="o">-</span><span class="n">cc</span><span class="p">,</span> <span class="n">tz</span><span class="p">],</span>
+                     <span class="p">[</span><span class="mf">0.</span><span class="p">,</span>          <span class="mf">0.</span><span class="p">,</span>          <span class="mf">0.</span><span class="p">,</span>          <span class="mf">1.</span> <span class="o">/</span> <span class="n">scale</span><span class="p">]])</span></div>
+
+
+<div class="viewcode-block" id="apply_transformation"><a class="viewcode-back" href="../../dic.html#dic.geometry_utils.apply_transformation">[docs]</a><span class="k">def</span> <span class="nf">apply_transformation</span><span class="p">(</span><span class="n">pt</span><span class="p">,</span> <span class="n">transformation_matrix</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Applies the affine transformation to the point.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    pt : array_like</span>
+<span class="sd">        ``(x, y, z)`` coordinate.</span>
+<span class="sd">    transformation_matrix : array_like</span>
+<span class="sd">        4x4 transformation_matrix.</span>
+<span class="sd">    offset : array_like</span>
+<span class="sd">        Offset from the origin.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        Tranformed ``(x, y, z)`` coordinate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">pt</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pt</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="mf">1.</span><span class="p">])</span>
+    <span class="n">x</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">-=</span> <span class="n">offset</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">transformation_matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">+=</span> <span class="n">offset</span>
+    <span class="k">return</span> <span class="n">x</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

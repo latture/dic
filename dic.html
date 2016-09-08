@@ -1,0 +1,1705 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic package &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="index.html"/>
+        <link rel="up" title="dic" href="modules.html"/>
+        <link rel="prev" title="dic" href="modules.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">dic</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">dic package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.dic_io">dic.dic_io module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.dic_utils">dic.dic_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.extensometer">dic.extensometer module</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.frame_creators">dic.frame_creators module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.geometry_utils">dic.geometry_utils module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.plot">dic.plot module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.scale">dic.scale module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.smooth">dic.smooth module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.stress_strain">dic.stress_strain module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.strut_metrics">dic.strut_metrics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.variables">dic.variables module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic.video">dic.video module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-dic">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="modules.html">dic</a> &raquo;</li>
+      
+    <li>dic package</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/dic.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="dic-package">
+<h1>dic package<a class="headerlink" href="#dic-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-dic.dic_io">
+<span id="dic-dic-io-module"></span><h2>dic.dic_io module<a class="headerlink" href="#module-dic.dic_io" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.dic_io.load_dic_data">
+<code class="descclassname">dic.dic_io.</code><code class="descname">load_dic_data</code><span class="sig-paren">(</span><em>filename</em>, <em>variable_names=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#load_dic_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.load_dic_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the DIC data specified by the given filename. Uncorrelated regions of the dataset are masked (i.e. removed)
+before the data is returned. Prior to loading the data must be exported into the Matlab (<code class="docutils literal"><span class="pre">.mat</span></code>) file format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Name of the DIC data file to load.</p>
+</div></blockquote>
+<p><strong>variable_names</strong> : None or sequence</p>
+<blockquote>
+<div><p>If <code class="docutils literal"><span class="pre">None</span></code> (the default) - read all variables in file. Otherwise variable_names should be a sequence of
+strings, giving names of the matlab variables to read from the file. The reader will skip any variable
+with a name not in this sequence, possibly saving some read processing.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict</p>
+<blockquote class="last">
+<div><p>A dictionary of <code class="docutils literal"><span class="pre">{key:</span> <span class="pre">value}</span></code> pairs where each key is the variable name,
+e.g. <code class="docutils literal"><span class="pre">X</span></code>, <code class="docutils literal"><span class="pre">U</span></code>, <code class="docutils literal"><span class="pre">Z</span></code>, etc., and the value is a 2D numpy array containing the
+exported DIC results.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_io.load_csv_data">
+<code class="descclassname">dic.dic_io.</code><code class="descname">load_csv_data</code><span class="sig-paren">(</span><em>filename</em>, <em>column</em>, <em>scale=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#load_csv_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.load_csv_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads the specifed column of the csv data from the given filename. Values are multiplied by <code class="docutils literal"><span class="pre">scale</span></code> before the
+data is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Name of the <code class="docutils literal"><span class="pre">.csv</span></code> file to load.</p>
+</div></blockquote>
+<p><strong>column</strong> : int</p>
+<blockquote>
+<div><p>Column index to load from the file.</p>
+</div></blockquote>
+<p><strong>scale</strong> : float, optional</p>
+<blockquote>
+<div><p>Value to scale the data by before returning. For example, when loading MTS data the scale variable
+can be used to change the native output (Volts) to force (N) by providing <code class="docutils literal"><span class="pre">scale</span></code> that is equal to
+the Newtons/Volts. Default is <code class="docutils literal"><span class="pre">None</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>1D array of data values.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_io.get_filenames">
+<code class="descclassname">dic.dic_io.</code><code class="descname">get_filenames</code><span class="sig-paren">(</span><em>directory</em>, <em>extension</em>, <em>prepend_directory=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#get_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.get_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves a sorted list of file names in the specified directory with the given extension.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
+<blockquote>
+<div><p>Directory to search.</p>
+</div></blockquote>
+<p><strong>extension</strong> : str</p>
+<blockquote>
+<div><p>Extension to search for (including the period, if applicable).</p>
+</div></blockquote>
+<p><strong>prepend_directory</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to prepend the directory to the filenames. Default = <code class="docutils literal"><span class="pre">False</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List[str]</p>
+<blockquote class="last">
+<div><p>Sorted list of file names that match the given extension</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_io.get_image_filenames">
+<code class="descclassname">dic.dic_io.</code><code class="descname">get_image_filenames</code><span class="sig-paren">(</span><em>directory</em>, <em>extension='.tif'</em>, <em>prepend_directory=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#get_image_filenames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.get_image_filenames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts and retrieves the camera images in the specified directory. This function assumes that the left camera images
+end in <code class="docutils literal"><span class="pre">_0.ext</span></code>, where <code class="docutils literal"><span class="pre">.ext</span></code> is the provided extension. Similarly, the right camera images are assumed to
+end in <code class="docutils literal"><span class="pre">_1.ext</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>directory</strong> : str</p>
+<blockquote>
+<div><p>Directory to search.</p>
+</div></blockquote>
+<p><strong>extension</strong> : str, optional</p>
+<blockquote>
+<div><p>Image extension. Default = <code class="docutils literal"><span class="pre">&quot;.tif&quot;</span></code>.</p>
+</div></blockquote>
+<p><strong>prepend_directory</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to prepend the directory to the filenames. Default = <code class="docutils literal"><span class="pre">False</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(left_camera_filenames, right_camera_filenames)</strong> : (List[str], List[str])</p>
+<blockquote class="last">
+<div><p>List of filenames belonging to each camera.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_io.update_dic_data">
+<code class="descclassname">dic.dic_io.</code><code class="descname">update_dic_data</code><span class="sig-paren">(</span><em>input_directory</em>, <em>output_directory</em>, <em>function=None</em>, <em>args=()</em>, <em>compress=False</em>, <em>processes=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#update_dic_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.update_dic_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <code class="docutils literal"><span class="pre">function</span></code> on each DIC file and saves the new version into the output directory.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_directory</strong> : str</p>
+<blockquote>
+<div><p>Path to uncompressed <code class="docutils literal"><span class="pre">.mat</span></code> files.</p>
+</div></blockquote>
+<p><strong>output_directory</strong> : str</p>
+<blockquote>
+<div><p>Where to save the compressed files.</p>
+</div></blockquote>
+<p><strong>function</strong> : callable, optional</p>
+<blockquote>
+<div><p>Function that accepts a <code class="docutils literal"><span class="pre">dict</span></code> and modifies the object in place. Default is <code class="docutils literal"><span class="pre">None</span></code>, i.e. no function
+is called.</p>
+</div></blockquote>
+<p><strong>args</strong> : tuple, optional</p>
+<blockquote>
+<div><p>Extra arguments passed to function, i.e. <code class="docutils literal"><span class="pre">f(dic_data,</span> <span class="pre">*args)</span></code>.</p>
+</div></blockquote>
+<p><strong>output_directory</strong> : str</p>
+<blockquote>
+<div><p>Directory to store the results.</p>
+</div></blockquote>
+<p><strong>compress</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to compress the DIC files when saving to the output directory.</p>
+</div></blockquote>
+<p><strong>processes</strong> : int, optional</p>
+<blockquote class="last">
+<div><p>The number of processes to use when converting the files. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+If <code class="docutils literal"><span class="pre">None</span></code> is provided then the number of processes will be set to the value
+returned by <code class="docutils literal"><span class="pre">multiprocessing.cpu_count()</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.dic_utils">
+<span id="dic-dic-utils-module"></span><h2>dic.dic_utils module<a class="headerlink" href="#module-dic.dic_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.dic_utils.get_step">
+<code class="descclassname">dic.dic_utils.</code><code class="descname">get_step</code><span class="sig-paren">(</span><em>dic_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#get_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.get_step" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the step size of the DIC data</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">int</p>
+<blockquote class="last">
+<div><p>Step size.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_utils.point_to_indices">
+<code class="descclassname">dic.dic_utils.</code><code class="descname">point_to_indices</code><span class="sig-paren">(</span><em>dic_data</em>, <em>pt</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#point_to_indices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.point_to_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> in pixel coordinates into the corresponding <code class="docutils literal"><span class="pre">(row,</span> <span class="pre">col)</span></code> to access the closest data point
+in the specified DIC data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>pt</strong> : (x, x)</p>
+<blockquote>
+<div><p>Two-dimensional coordinates of the pixel in global space.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(row, col)</strong> : (int, int)</p>
+<blockquote class="last">
+<div><p>The row and column in <code class="docutils literal"><span class="pre">dic_data</span></code> that corresponds to the given pixel point.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_utils.get_initial_position">
+<code class="descclassname">dic.dic_utils.</code><code class="descname">get_initial_position</code><span class="sig-paren">(</span><em>dic_data</em>, <em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#get_initial_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.get_initial_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the initial position (in mm) held at the specified row and column.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>row</strong> : int</p>
+<blockquote>
+<div><p>Row in the DIC data to access.</p>
+</div></blockquote>
+<p><strong>col</strong> : int</p>
+<blockquote>
+<div><p>Column in the DIC data to access.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Initial <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> position in mm.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_utils.get_displacement">
+<code class="descclassname">dic.dic_utils.</code><code class="descname">get_displacement</code><span class="sig-paren">(</span><em>dic_data</em>, <em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#get_displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.get_displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the displacement (in mm) held at the specified row and column.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>row</strong> : int</p>
+<blockquote>
+<div><p>Row in the DIC data to access.</p>
+</div></blockquote>
+<p><strong>col</strong> : int</p>
+<blockquote>
+<div><p>Column in the DIC data to access.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Displacements <code class="docutils literal"><span class="pre">(u,</span> <span class="pre">v,</span> <span class="pre">w)</span></code> in mm.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.dic_utils.point_to_position">
+<code class="descclassname">dic.dic_utils.</code><code class="descname">point_to_position</code><span class="sig-paren">(</span><em>dic_data</em>, <em>pt</em>, <em>add_displacement=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#point_to_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.point_to_position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms a point in pixel space into its displaced coordinates in mm.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>pt</strong> : (x, y)</p>
+<blockquote>
+<div><p>Two-dimensional coordinates of the pixel in global space.</p>
+</div></blockquote>
+<p><strong>add_displacement</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to add deformation to the undeformed position. Default is <code class="docutils literal"><span class="pre">True</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> position in mm of the point.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.extensometer">
+<span id="dic-extensometer-module"></span><h2>dic.extensometer module<a class="headerlink" href="#module-dic.extensometer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dic.extensometer.Extensometer">
+<em class="property">class </em><code class="descclassname">dic.extensometer.</code><code class="descname">Extensometer</code><a class="reference internal" href="_modules/dic/extensometer.html#Extensometer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.Extensometer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">dic.extensometer.Extensometer</span></code></a></p>
+<p>An extensometer that is defined between two points in pixel space.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">pt1</span></code></td>
+<td>Alias for field number 0</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">pt2</span></code></td>
+<td>Alias for field number 1</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">count</span></code>(...)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">index</span></code>((value,&nbsp;[start,&nbsp;...)</td>
+<td>Raises ValueError if the value is not present.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_length">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_length</code><span class="sig-paren">(</span><em>dic_data</em>, <em>extensometer</em>, <em>add_displacement=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_length"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_length" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the length of the extensometer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometer</strong> : :class:.`Extensometer`</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinates of the extensometer points in pixel space.</p>
+</div></blockquote>
+<p><strong>add_displacement</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to add displacement to the undeformed position. Default is <code class="docutils literal"><span class="pre">True</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Length of the extensometer.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_transverse_displacement">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_transverse_displacement</code><span class="sig-paren">(</span><em>dic_data</em>, <em>extensometer</em>, <em>fractional_points=10</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_transverse_displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_transverse_displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the displacement transverse to the deformed end-points of the extensometer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometer</strong> : :class:.`Extensometer`</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinates of the extensometer points in pixel space.</p>
+</div></blockquote>
+<p><strong>fractional_points</strong> : int or List[float], optional</p>
+<blockquote>
+<div><p>If <code class="docutils literal"><span class="pre">int</span></code>, the transverse displacement will be calculated in uniformly spaced intervals
+on the interval <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">1]</span></code> with the number of sample points determined by <code class="docutils literal"><span class="pre">fractional_points</span></code>.
+If <code class="docutils literal"><span class="pre">List[float]</span></code>, then the given items in the list will be used directly to compute displacement.
+If a <code class="docutils literal"><span class="pre">List</span></code> is given, a value of <code class="docutils literal"><span class="pre">0</span></code> corresponds to <code class="docutils literal"><span class="pre">pt1</span></code> of the extensometer and <code class="docutils literal"><span class="pre">1</span></code>
+corresponds to <code class="docutils literal"><span class="pre">pt2</span></code> of the extensometer, i.e. the fractional coordinates are the fraction
+along the extensometer&#8217;s length at which the transverse displacement should be calculated.
+Default is <code class="docutils literal"><span class="pre">10</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List[float]</p>
+<blockquote class="last">
+<div><p>List of transverse displacements.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_strain">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_strain</code><span class="sig-paren">(</span><em>dic_data</em>, <em>extensometer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_strain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the strain between the specified points. Points should be specified by their pixel location.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometer</strong> : :class:.`Extensometer`</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinates of the extensometer points in pixel space.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Strain, i.e. <code class="docutils literal"><span class="pre">deformed_length</span> <span class="pre">/</span> <span class="pre">initial_length</span> <span class="pre">-</span> <span class="pre">1.0</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_angle">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_angle</code><span class="sig-paren">(</span><em>dic_data</em>, <em>extensometer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the angle (in radians) between the specified extensometer and the x-axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometer</strong> : :class:.`Extensometer`</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinates of the extensometer points in pixel space.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Angle in radians.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_curvature">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_curvature</code><span class="sig-paren">(</span><em>dic_data</em>, <em>extensometer</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_curvature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_curvature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the curvature of the given extensometer. Curvature is calculated
+by fitting a circle to the data points that are within a distance of
++/- <code class="docutils literal"><span class="pre">extensometer_length</span> <span class="pre">/</span> <span class="pre">4</span></code> of the point with the maximum
+transverse displacement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometer</strong> : :class:.`Extensometer`</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> coordinates of the extensometer points in pixel space.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Curvature.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.extensometer_sequence">
+<code class="descclassname">dic.extensometer.</code><code class="descname">extensometer_sequence</code><span class="sig-paren">(</span><em>dic_filenames</em>, <em>extensometers</em>, <em>metric</em>, <em>description='Processing extensometers'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#extensometer_sequence"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.extensometer_sequence" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extracts the specified metric from the extensometers for all DIC files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_filenames</strong> : str</p>
+<blockquote>
+<div><p>Names of DIC files to analyze.</p>
+</div></blockquote>
+<p><strong>extensometers</strong> : List[<a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">Extensometer</span></code></a>]</p>
+<blockquote>
+<div><p>List of extensometers to</p>
+</div></blockquote>
+<p><strong>metric</strong> : callable</p>
+<blockquote>
+<div><p>A callable object that provides the signature <code class="docutils literal"><span class="pre">metric(dict,</span> <span class="pre">Extensometer)</span> <span class="pre">-&gt;</span> <span class="pre">float</span></code>, i.e. takes as input
+a <code class="docutils literal"><span class="pre">dict</span></code> of dic_data and an <a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">Extensometer</span></code></a> and returns a <code class="docutils literal"><span class="pre">float</span></code>.</p>
+</div></blockquote>
+<p><strong>description</strong> : str, optional</p>
+<blockquote>
+<div><p>Description of the computation that will be printed along with the progress bar.
+Default is <code class="docutils literal"><span class="pre">&quot;Processing</span> <span class="pre">extensometers&quot;</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Array of size <code class="docutils literal"><span class="pre">len(dic_filenames)</span></code> by <code class="docutils literal"><span class="pre">len(extensometers)</span></code></p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.extensometer.place_extensometers">
+<code class="descclassname">dic.extensometer.</code><code class="descname">place_extensometers</code><span class="sig-paren">(</span><em>reference_image_filename</em>, <em>reference_dic_filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/extensometer.html#place_extensometers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.place_extensometers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Places extensometers on the given set of reference data. Clicking the figure will add a point. Adding two points
+will create an extensometer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>reference_image_filename</strong> : str</p>
+<blockquote>
+<div><p>Name of the file containing the reference image, e.g. the first image of the DIC data.</p>
+</div></blockquote>
+<p><strong>reference_dic_filename</strong> : str</p>
+<blockquote>
+<div><p>Name of the file containing the reference DIC data, e.g. the DIC data calculated from the reference image.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">List[<a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">Extensometer</span></code></a>]</p>
+<blockquote class="last">
+<div><p>List of extensometers added by the user.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.frame_creators">
+<span id="dic-frame-creators-module"></span><h2>dic.frame_creators module<a class="headerlink" href="#module-dic.frame_creators" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="dic.frame_creators.OverlayWithStressStrainFrameCreator">
+<em class="property">class </em><code class="descclassname">dic.frame_creators.</code><code class="descname">OverlayWithStressStrainFrameCreator</code><span class="sig-paren">(</span><em>image_filenames</em>, <em>dic_filenames</em>, <em>variable</em>, <em>xy_data</em>, <em>figure_width=10.0</em>, <em>fractional_padding=0.5</em>, <em>overlay_contour_options=None</em>, <em>xy_axes_options=None</em>, <em>xy_plot_options=None</em>, <em>colorbar_options=None</em>, <em>point_plot_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/frame_creators.html#OverlayWithStressStrainFrameCreator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.frame_creators.OverlayWithStressStrainFrameCreator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class creates a frames of a contour overlay, colorbar and stress-strain plot.</p>
+<p class="rubric">Attributes</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="91%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>image_filenames</td>
+<td>(List[str]) List of filenames containing the background images for the overlay plots.</td>
+</tr>
+<tr class="row-even"><td>dic_filenames</td>
+<td>(str) List of filenames containing the DIC data files.</td>
+</tr>
+<tr class="row-odd"><td>variable</td>
+<td>(str) Variable from the DIC data to plot on the overlay.</td>
+</tr>
+<tr class="row-even"><td>xy_data</td>
+<td>(List[T], List[T]) Tuple of <code class="docutils literal"><span class="pre">(xdata,</span> <span class="pre">ydata)</span></code> to plot on the 2D plot. The length of <code class="docutils literal"><span class="pre">xdata</span></code> and <code class="docutils literal"><span class="pre">ydata</span></code> must be equal and the same as the number of images and DIC files.</td>
+</tr>
+<tr class="row-odd"><td>figure_width</td>
+<td>(float, optional) Width of the figure in inches. The height will be chosen automatically based on the aspect ratio of the overlays. Default is <code class="docutils literal"><span class="pre">10.0</span></code>.</td>
+</tr>
+<tr class="row-even"><td>fractional_padding</td>
+<td>(float, optional) Fraction of the image width to pad between the right of the colorbar and the left of the x-y data plot. Default is <code class="docutils literal"><span class="pre">0.5</span></code></td>
+</tr>
+<tr class="row-odd"><td>overlay_contour_options</td>
+<td>(dict, optional) Keyword arguments to use when calling <code class="docutils literal"><span class="pre">matplotlib.pyplot.contourf</span></code>. Default is <code class="docutils literal"><span class="pre">None</span></code> Valid keys are <code class="docutils literal"><span class="pre">corner_mask</span></code>, <code class="docutils literal"><span class="pre">alpha</span></code>, <code class="docutils literal"><span class="pre">cmap</span></code>, <code class="docutils literal"><span class="pre">levels</span></code>, <code class="docutils literal"><span class="pre">extend</span></code>, etc. See <code class="docutils literal"><span class="pre">matplotlib.pyplot.contourf</span></code> for all valid keys.</td>
+</tr>
+<tr class="row-even"><td>xy_axes_options</td>
+<td>(dict, optional) Keyword arguments to the x-y data axes. Default is <code class="docutils literal"><span class="pre">None</span></code>. Valid keys are legal <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code> kwargs plus projection, which chooses a projection type for the axes.</td>
+</tr>
+<tr class="row-odd"><td>xy_plot_options</td>
+<td>(dict, optional) Keyword arguments to use when plotting the data on the x-y data axis. Default is <code class="docutils literal"><span class="pre">None</span></code>. Valid keys are <code class="docutils literal"><span class="pre">matplotlib.lines.Line2D</span></code> properties, e.g. <code class="docutils literal"><span class="pre">alpha</span></code>, <code class="docutils literal"><span class="pre">color</span></code>, <code class="docutils literal"><span class="pre">label</span></code>, etc.</td>
+</tr>
+<tr class="row-even"><td>colorbar_options</td>
+<td>(dict, optional) Keyword arguments to the colorbar axes. Default is <code class="docutils literal"><span class="pre">None</span></code>. Valid keys are legal <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code> kwargs plus projection, which chooses a projection type for the axes.</td>
+</tr>
+<tr class="row-odd"><td>point_plot_options</td>
+<td>(dict, optional) Keyword arguments to use when plotting the current data point in the x-y data series on the x-y axes. If <code class="docutils literal"><span class="pre">None</span></code> is supplied a purple circle is used.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="20%" />
+<col width="80%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td>__call__(i)</td>
+<td>Returns the <a href="#id1"><span class="problematic" id="id2">``</span></a>i``th figure.</td>
+</tr>
+<tr class="row-even"><td>__len__()</td>
+<td>Returns the total number of frames to create.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.geometry_utils">
+<span id="dic-geometry-utils-module"></span><h2>dic.geometry_utils module<a class="headerlink" href="#module-dic.geometry_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="attribute">
+<dt id="dic.geometry_utils.norm">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">norm</code><a class="reference internal" href="_modules/dic/geometry_utils.html#norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.norm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the norm of a vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : array_like</p>
+<blockquote>
+<div><p>Input vector.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Norm of the vector.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dic.geometry_utils.apply_rotation">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">apply_rotation</code><a class="reference internal" href="_modules/dic/geometry_utils.html#apply_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.apply_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates the given <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> indices by an amount <code class="docutils literal"><span class="pre">theta</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : int</p>
+<blockquote>
+<div><p>Coordinate with respect to the x-axis.</p>
+</div></blockquote>
+<p><strong>y</strong> : int</p>
+<blockquote>
+<div><p>Coordinate with respect to the y-axis.</p>
+</div></blockquote>
+<p><strong>theta</strong> : T</p>
+<blockquote>
+<div><p>Angle in radians.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(x_new, y_new)</strong> : (int, int)</p>
+<blockquote class="last">
+<div><p>Rotated coordinates.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.geometry_utils.distance_between">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">distance_between</code><span class="sig-paren">(</span><em>pt1</em>, <em>pt2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/geometry_utils.html#distance_between"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.distance_between" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the distance between the given points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt1</strong> : List[T]</p>
+<blockquote>
+<div><p>Coordinate of the first point.</p>
+</div></blockquote>
+<p><strong>pt2</strong> : List[T]</p>
+<blockquote>
+<div><p>Coordinate of the second point.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Distance</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.geometry_utils.distance_to">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">distance_to</code><span class="sig-paren">(</span><em>pt0</em>, <em>pt1</em>, <em>pt2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/geometry_utils.html#distance_to"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.distance_to" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the distance between <code class="docutils literal"><span class="pre">pt0</span></code> and the line that passes through
+<code class="docutils literal"><span class="pre">pt1</span></code> and <code class="docutils literal"><span class="pre">pt2</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt0</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote>
+<div><p>Point to calculate distance to.</p>
+</div></blockquote>
+<p><strong>pt1</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote>
+<div><p>First point that defines the line.</p>
+</div></blockquote>
+<p><strong>pt2</strong> : <code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote>
+<div><p>Second point that defines the line.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Distance.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.geometry_utils.get_angle">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">get_angle</code><span class="sig-paren">(</span><em>pt1</em>, <em>pt2</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/geometry_utils.html#get_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.get_angle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the angle between the given two-dimensional points and the x-axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt1</strong> : List[T]</p>
+<blockquote>
+<div><p>(x, y) coordinate of the first point.</p>
+</div></blockquote>
+<p><strong>pt2</strong> : List[T]</p>
+<blockquote>
+<div><p>(x, y) coordinate of the second point.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Angle in radians.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.geometry_utils.get_transformation_matrix">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">get_transformation_matrix</code><span class="sig-paren">(</span><em>axis</em>, <em>theta</em>, <em>translation</em>, <em>scale</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/geometry_utils.html#get_transformation_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.get_transformation_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the 4x4 transformation matrix that applies the specified
+scale, translation, and rotation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axis</strong> : array_like</p>
+<blockquote>
+<div><p>Axis of rotation.</p>
+</div></blockquote>
+<p><strong>theta</strong> : float</p>
+<blockquote>
+<div><p>Angle of rotation in radians.</p>
+</div></blockquote>
+<p><strong>translation</strong> : array_like</p>
+<blockquote>
+<div><p>Translation vector.</p>
+</div></blockquote>
+<p><strong>scale</strong> : float</p>
+<blockquote>
+<div><p>Uniform scale factor.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>4x4 transformation matrix.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.geometry_utils.apply_transformation">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">apply_transformation</code><span class="sig-paren">(</span><em>pt</em>, <em>transformation_matrix</em>, <em>offset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/geometry_utils.html#apply_transformation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.apply_transformation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Applies the affine transformation to the point.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pt</strong> : array_like</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> coordinate.</p>
+</div></blockquote>
+<p><strong>transformation_matrix</strong> : array_like</p>
+<blockquote>
+<div><p>4x4 transformation_matrix.</p>
+</div></blockquote>
+<p><strong>offset</strong> : array_like</p>
+<blockquote>
+<div><p>Offset from the origin.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Tranformed <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> coordinate.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="dic.geometry_utils.cross3d">
+<code class="descclassname">dic.geometry_utils.</code><code class="descname">cross3d</code><a class="reference internal" href="_modules/dic/geometry_utils.html#cross3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.cross3d" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the cross product between two 3D vectors.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>a</strong> : array_like</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> components of the first vector.</p>
+</div></blockquote>
+<p><strong>b</strong> : array_like</p>
+<blockquote>
+<div><p><code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code> components of the second vector.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Vector cross product.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.plot">
+<span id="dic-plot-module"></span><h2>dic.plot module<a class="headerlink" href="#module-dic.plot" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.plot.plot_overlay">
+<code class="descclassname">dic.plot.</code><code class="descname">plot_overlay</code><span class="sig-paren">(</span><em>image_filename</em>, <em>dic_data</em>, <em>key</em>, <em>fig=None</em>, <em>ax=None</em>, <em>contour_options=None</em>, <em>add_colorbar=False</em>, <em>colorbar_title=None</em>, <em>colorbar_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/plot.html#plot_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.plot_overlay" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots a filled contour overlay on top of the specified image.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>image_filename</strong> : str</p>
+<blockquote>
+<div><p>Name of file containing the background image.</p>
+</div></blockquote>
+<p><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data (usually loaded from a <code class="docutils literal"><span class="pre">.mat</span></code> file).</p>
+</div></blockquote>
+<p><strong>key</strong> : str</p>
+<blockquote>
+<div><p>Name of the key to use as the overlay variable. The key must be present in the data loaded from <code class="docutils literal"><span class="pre">dic_filename</span></code>.</p>
+</div></blockquote>
+<p><strong>fig</strong> : <code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, optional</p>
+<blockquote>
+<div><p>Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this
+nor <code class="docutils literal"><span class="pre">ax</span></code> is specified, a new figure and axis will be created.</p>
+</div></blockquote>
+<p><strong>ax</strong> : <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>, optional</p>
+<blockquote>
+<div><p>Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#8217;s current
+axes. If neither this nor <code class="docutils literal"><span class="pre">fig</span></code> is specified a new axes object will be created.</p>
+</div></blockquote>
+<p><strong>contour_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when calling <code class="docutils literal"><span class="pre">matplotlib.pyplot.contourf</span></code>. Default is <code class="docutils literal"><span class="pre">None</span></code>
+Valid keys are <code class="docutils literal"><span class="pre">corner_mask</span></code>, <code class="docutils literal"><span class="pre">alpha</span></code>, <code class="docutils literal"><span class="pre">cmap</span></code>, <code class="docutils literal"><span class="pre">levels</span></code>, <code class="docutils literal"><span class="pre">extend</span></code>, etc.
+See <code class="docutils literal"><span class="pre">matplotlib.pyplot.contourf</span></code> for all valid keys.</p>
+</div></blockquote>
+<p><strong>add_colorbar</strong> : bool, optional</p>
+<blockquote>
+<div><p>Whether to add a colorbar to the overlay axes. Default is <code class="docutils literal"><span class="pre">False</span></code>.</p>
+</div></blockquote>
+<p><strong>colorbar_title</strong> : str, optional</p>
+<blockquote>
+<div><p>Title to add to the colorbar. Default is <code class="docutils literal"><span class="pre">None</span></code>. If <code class="docutils literal"><span class="pre">None</span></code> is provided, the title is set to the <code class="docutils literal"><span class="pre">key</span></code>.</p>
+</div></blockquote>
+<p><strong>colorbar_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when adding a colorbar to the overlay. Default is <code class="docutils literal"><span class="pre">None</span></code>. If <code class="docutils literal"><span class="pre">None</span></code> is provided
+the colorbar will be shrunk slightly such that the color bar is roughly the same height as the overlay.
+Valid key word arguments include <code class="docutils literal"><span class="pre">ticks</span></code>, <code class="docutils literal"><span class="pre">format</span></code>, <code class="docutils literal"><span class="pre">orientation</span></code>, etc.
+See <code class="docutils literal"><span class="pre">matplotlib.figure.colorbar</span></code> for all options.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<blockquote class="last">
+<div><p>Figure and axes containing the background image and contour overlay.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.plot.plot_xy">
+<code class="descclassname">dic.plot.</code><code class="descname">plot_xy</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>fig=None</em>, <em>ax=None</em>, <em>figure_options=None</em>, <em>axes_options=None</em>, <em>plot_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/plot.html#plot_xy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.plot_xy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the given x, y data.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : List[T]</p>
+<blockquote>
+<div><p>X data points.</p>
+</div></blockquote>
+<p><strong>y</strong> : List[T]</p>
+<blockquote>
+<div><p>Y data points.</p>
+</div></blockquote>
+<p><strong>fig</strong> : <code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, optional</p>
+<blockquote>
+<div><p>Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this
+nor <code class="docutils literal"><span class="pre">ax</span></code> is specified, a new figure and axis will be created.</p>
+</div></blockquote>
+<p><strong>ax</strong> : <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>, optional</p>
+<blockquote>
+<div><p>Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#8217;s current
+axes. If neither this nor <code class="docutils literal"><span class="pre">fig</span></code> is specified a new axes object will be created.</p>
+</div></blockquote>
+<p><strong>figure_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when creating the figure. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+Valid keys are <code class="docutils literal"><span class="pre">figsize</span></code>, <code class="docutils literal"><span class="pre">dpi</span></code>, <code class="docutils literal"><span class="pre">facecolor</span></code>, <code class="docutils literal"><span class="pre">edgecolor</span></code>, <code class="docutils literal"><span class="pre">linewidth</span></code>, <code class="docutils literal"><span class="pre">frameon</span></code>, <code class="docutils literal"><span class="pre">subplotpars</span></code>,
+and <code class="docutils literal"><span class="pre">tight_layout</span></code>.</p>
+</div></blockquote>
+<p><strong>axes_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when adding an axis to the figure. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+Valid keys are legal <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code> kwargs plus projection, which chooses a projection type
+for the axes.</p>
+</div></blockquote>
+<p><strong>plot_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when plotting the data on the axis. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+Valid keys are <code class="docutils literal"><span class="pre">matplotlib.lines.Line2D</span></code> properties, e.g. <code class="docutils literal"><span class="pre">alpha</span></code>, <code class="docutils literal"><span class="pre">color</span></code>, <code class="docutils literal"><span class="pre">label</span></code>, etc.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<blockquote class="last">
+<div><p>Figure and axes containing the x-y data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.plot.plot_colorbar">
+<code class="descclassname">dic.plot.</code><code class="descname">plot_colorbar</code><span class="sig-paren">(</span><em>cmap</em>, <em>vmin</em>, <em>vmax</em>, <em>fig=None</em>, <em>ax=None</em>, <em>figure_options=None</em>, <em>axes_options=None</em>, <em>colorbar_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/plot.html#plot_colorbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.plot_colorbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a colorbar of the specified name and normalization.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cmap</strong> : str</p>
+<blockquote>
+<div><p>Name of the Matplotlib colorbar.</p>
+</div></blockquote>
+<p><strong>vmin</strong> : float</p>
+<blockquote>
+<div><p>Lower limit of the normalization.</p>
+</div></blockquote>
+<p><strong>vmax</strong> : float</p>
+<blockquote>
+<div><p>Upper limit of the normalization.</p>
+</div></blockquote>
+<p><strong>fig</strong> : <code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, optional</p>
+<blockquote>
+<div><p>Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this
+nor <code class="docutils literal"><span class="pre">ax</span></code> is specified, a new figure and axis will be created.</p>
+</div></blockquote>
+<p><strong>ax</strong> : <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code>, optional</p>
+<blockquote>
+<div><p>Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#8217;s current
+axes. If neither this nor <code class="docutils literal"><span class="pre">fig</span></code> is specified a new axes object will be created.</p>
+</div></blockquote>
+<p><strong>figure_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when creating the figure. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+Valid keys are <code class="docutils literal"><span class="pre">figsize</span></code>, <code class="docutils literal"><span class="pre">dpi</span></code>, <code class="docutils literal"><span class="pre">facecolor</span></code>, <code class="docutils literal"><span class="pre">edgecolor</span></code>, <code class="docutils literal"><span class="pre">linewidth</span></code>, <code class="docutils literal"><span class="pre">frameon</span></code>, <code class="docutils literal"><span class="pre">subplotpars</span></code>,
+and <code class="docutils literal"><span class="pre">tight_layout</span></code>.</p>
+</div></blockquote>
+<p><strong>axes_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when adding an axis to the figure. Default is <code class="docutils literal"><span class="pre">None</span></code>.
+Valid keys are legal <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code> kwargs plus projection, which chooses a projection type
+for the axes.</p>
+</div></blockquote>
+<p><strong>colorbar_options</strong> : dict, optional</p>
+<blockquote>
+<div><p>Keyword arguments to use when adding the colorbar to the axes. Valid keys are <code class="docutils literal"><span class="pre">orientation</span></code>, <code class="docutils literal"><span class="pre">ticks</span></code>, etc.
+See <code class="docutils literal"><span class="pre">matplotlib.colorbar.ColorbarBase</span></code> for more valid keyword arguments.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>, <code class="docutils literal"><span class="pre">matplotlib.axes.Axes</span></code></p>
+<blockquote class="last">
+<div><p>Figure and axes containing the colorbar.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.plot.show">
+<code class="descclassname">dic.plot.</code><code class="descname">show</code><span class="sig-paren">(</span><em>*args</em>, <em>**kw</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matplotlib/pyplot.html#show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a figure.
+When running in ipython with its pylab mode, display all
+figures and return to the ipython prompt.</p>
+<p>In non-interactive mode, display all figures and block until
+the figures have been closed; in interactive mode it has no
+effect unless figures were created prior to a change from
+non-interactive to interactive mode (not recommended).  In
+that case it displays the figures but does not block.</p>
+<p>A single experimental keyword argument, <em>block</em>, may be
+set to True or False to override the blocking behavior
+described above.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.plot.savefig">
+<code class="descclassname">dic.plot.</code><code class="descname">savefig</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/matplotlib/pyplot.html#savefig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.savefig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the current figure.</p>
+<p>Call signature:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">savefig</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;w&#39;</span><span class="p">,</span>
+        <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;portrait&#39;</span><span class="p">,</span> <span class="n">papertype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">pad_inches</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
+        <span class="n">frameon</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The output formats available depend on the backend being used.</p>
+<p>Arguments:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>fname</em>:</dt>
+<dd><p class="first">A string containing a path to a filename, or a Python
+file-like object, or possibly some backend-dependent object
+such as <code class="xref py py-class docutils literal"><span class="pre">PdfPages</span></code>.</p>
+<p>If <em>format</em> is <em>None</em> and <em>fname</em> is a string, the output
+format is deduced from the extension of the filename. If
+the filename has no extension, the value of the rc parameter
+<code class="docutils literal"><span class="pre">savefig.format</span></code> is used.</p>
+<p class="last">If <em>fname</em> is not a string, remember to specify <em>format</em> to
+ensure that the correct backend is used.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Keyword arguments:</p>
+<blockquote>
+<div><dl class="docutils">
+<dt><em>dpi</em>: [ <em>None</em> | <code class="docutils literal"><span class="pre">scalar</span> <span class="pre">&gt;</span> <span class="pre">0</span></code> | &#8216;figure&#8217;]</dt>
+<dd>The resolution in dots per inch.  If <em>None</em> it will default to
+the value <code class="docutils literal"><span class="pre">savefig.dpi</span></code> in the matplotlibrc file. If &#8216;figure&#8217;
+it will set the dpi to be the value of the figure.</dd>
+<dt><em>facecolor</em>, <em>edgecolor</em>:</dt>
+<dd>the colors of the figure rectangle</dd>
+<dt><em>orientation</em>: [ &#8216;landscape&#8217; | &#8216;portrait&#8217; ]</dt>
+<dd>not supported on all backends; currently only on postscript output</dd>
+<dt><em>papertype</em>:</dt>
+<dd>One of &#8216;letter&#8217;, &#8216;legal&#8217;, &#8216;executive&#8217;, &#8216;ledger&#8217;, &#8216;a0&#8217; through
+&#8216;a10&#8217;, &#8216;b0&#8217; through &#8216;b10&#8217;. Only supported for postscript
+output.</dd>
+<dt><em>format</em>:</dt>
+<dd>One of the file extensions supported by the active
+backend.  Most backends support png, pdf, ps, eps and svg.</dd>
+<dt><em>transparent</em>:</dt>
+<dd>If <em>True</em>, the axes patches will all be transparent; the
+figure patch will also be transparent unless facecolor
+and/or edgecolor are specified via kwargs.
+This is useful, for example, for displaying
+a plot on top of a colored background on a web page.  The
+transparency of these patches will be restored to their
+original values upon exit of this function.</dd>
+<dt><em>frameon</em>:</dt>
+<dd>If <em>True</em>, the figure patch will be colored, if <em>False</em>, the
+figure background will be transparent.  If not provided, the
+rcParam &#8216;savefig.frameon&#8217; will be used.</dd>
+<dt><em>bbox_inches</em>:</dt>
+<dd>Bbox in inches. Only the given portion of the figure is
+saved. If &#8216;tight&#8217;, try to figure out the tight bbox of
+the figure.</dd>
+<dt><em>pad_inches</em>:</dt>
+<dd>Amount of padding around the figure when bbox_inches is
+&#8216;tight&#8217;.</dd>
+<dt><em>bbox_extra_artists</em>:</dt>
+<dd>A list of extra artists that will be considered when the
+tight bbox is calculated.</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.scale">
+<span id="dic-scale-module"></span><h2>dic.scale module<a class="headerlink" href="#module-dic.scale" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.scale.px_per_mm">
+<code class="descclassname">dic.scale.</code><code class="descname">px_per_mm</code><span class="sig-paren">(</span><em>dic_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/scale.html#px_per_mm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.scale.px_per_mm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average pixels per millimeter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.
+The dictionary must contain the keys <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, <code class="docutils literal"><span class="pre">X</span></code> and <code class="docutils literal"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">float</p>
+<blockquote class="last">
+<div><p>Pixels per millimeter.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.scale.mm_per_px">
+<code class="descclassname">dic.scale.</code><code class="descname">mm_per_px</code><span class="sig-paren">(</span><em>dic_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/scale.html#mm_per_px"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.scale.mm_per_px" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average millimeters per pixel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.
+The dictionary must contain the keys <code class="docutils literal"><span class="pre">x</span></code>, <code class="docutils literal"><span class="pre">y</span></code>, <code class="docutils literal"><span class="pre">X</span></code> and <code class="docutils literal"><span class="pre">Y</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">flost</p>
+<blockquote class="last">
+<div><p>Millimeters per pixel.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.smooth">
+<span id="dic-smooth-module"></span><h2>dic.smooth module<a class="headerlink" href="#module-dic.smooth" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.smooth.smooth">
+<code class="descclassname">dic.smooth.</code><code class="descname">smooth</code><span class="sig-paren">(</span><em>x</em>, <em>window_len=10</em>, <em>window='hanning'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/smooth.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.smooth.smooth" title="Permalink to this definition">¶</a></dt>
+<dd><p>Smooth the data using a window with requested size.</p>
+<p>This method is based on the convolution of a scaled window with the signal.
+The signal is prepared by introducing reflected copies of the signal
+(with the window size) at both ends of the data so that transient parts are minimized
+in the beginning and end of the output signal.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x</strong> : List[T]</p>
+<blockquote>
+<div><p>The input signal.</p>
+</div></blockquote>
+<p><strong>window_len</strong> : int, optional</p>
+<blockquote>
+<div><p>The dimension of the smoothing window. Default is <code class="docutils literal"><span class="pre">10</span></code>.</p>
+</div></blockquote>
+<p><strong>window</strong> : {&#8216;moving_average&#8217;, &#8216;hanning&#8217;, &#8216;hamming&#8217;, &#8216;bartlett&#8217;, &#8216;blackman&#8217;}, optional</p>
+<blockquote>
+<div><p>The type of window. Default is <code class="docutils literal"><span class="pre">'hanning'</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>The smoothed signal.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">References</p>
+<p>This function was modified from this <a class="reference external" href="https://raw.githubusercontent.com/scipy/scipy-cookbook/master/ipython/SignalSmooth.ipynb`_.">source</a>.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">smooth</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="go">array([-0.97986086, -0.76226712, -0.51086275, -0.22217585,  0.08607285,</span>
+<span class="go">        0.37779472,  0.61419799,  0.772406  ,  0.85738291])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.stress_strain">
+<span id="dic-stress-strain-module"></span><h2>dic.stress_strain module<a class="headerlink" href="#module-dic.stress_strain" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.stress_strain.stress_strain">
+<code class="descclassname">dic.stress_strain.</code><code class="descname">stress_strain</code><span class="sig-paren">(</span><em>dic_filenames</em>, <em>force</em>, <em>area</em>, <em>extensometers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/stress_strain.html#stress_strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.stress_strain.stress_strain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the stress-strain response using the force data and the strain data calculated from
+the DIC files in the specified directory. Strain in calculated for each of the given extensometers, and the
+average at each data point is returned.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_filenames</strong> : List[str]</p>
+<blockquote>
+<div><p>List of filenames containing the DIC data.</p>
+</div></blockquote>
+<p><strong>force</strong> : List[float]</p>
+<blockquote>
+<div><p>List of force data points. Number of data points must eq</p>
+</div></blockquote>
+<p><strong>area</strong> : float</p>
+<blockquote>
+<div><p>Area of the sample.</p>
+</div></blockquote>
+<p><strong>extensometers</strong> : List[<a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">Extensometer</span></code></a>]</p>
+<blockquote>
+<div><p>List of pixel coordinates for each extensometer.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>(stress, strain)</strong> : (<code class="docutils literal"><span class="pre">numpy.ndarray</span></code>, <code class="docutils literal"><span class="pre">numpy.ndarray</span></code>)</p>
+<blockquote class="last">
+<div><p>Stress-strain data.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.strut_metrics">
+<span id="dic-strut-metrics-module"></span><h2>dic.strut_metrics module<a class="headerlink" href="#module-dic.strut_metrics" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.strut_metrics.nodal_rotation">
+<code class="descclassname">dic.strut_metrics.</code><code class="descname">nodal_rotation</code><span class="sig-paren">(</span><em>dic_filenames</em>, <em>extensometers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/strut_metrics.html#nodal_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.strut_metrics.nodal_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the rotation of each extensometer for every DIC file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_filenames</strong> : List[str]</p>
+<blockquote>
+<div><p>List of filenames containing the DIC data.</p>
+</div></blockquote>
+<p><strong>extensometers</strong> : List[<a class="reference internal" href="#dic.extensometer.Extensometer" title="dic.extensometer.Extensometer"><code class="xref py py-class docutils literal"><span class="pre">Extensometer</span></code></a>]</p>
+<blockquote>
+<div><p>List of pixel coordinates for each extensometer.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><code class="docutils literal"><span class="pre">numpy.ndarray</span></code></p>
+<blockquote class="last">
+<div><p>Nodal rotation. Shape of the returned array is <code class="docutils literal"><span class="pre">(len(dic_filenames),</span> <span class="pre">len(extensometers))</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.variables">
+<span id="dic-variables-module"></span><h2>dic.variables module<a class="headerlink" href="#module-dic.variables" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.variables.add_transverse_displacement">
+<code class="descclassname">dic.variables.</code><code class="descname">add_transverse_displacement</code><span class="sig-paren">(</span><em>dic_data</em>, <em>nodes</em>, <em>elems</em>, <em>strut_radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/variables.html#add_transverse_displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.variables.add_transverse_displacement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds the <code class="docutils literal"><span class="pre">transverse_displacement</span></code> key to the DIC data. Transverse displacement is
+defined as displacement perpendicular to the strut axis. Data near the nodal regions
+is removed from the correlated data. Strut axis is determined by the data points that
+are within +/- the strut radius along the vector between nodal locations. DIC data
+is updated in-place.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote>
+<div><p>Dictionary containing the DIC data.</p>
+</div></blockquote>
+<p><strong>nodes</strong> : List[(T, T)]</p>
+<blockquote>
+<div><p>List of <code class="docutils literal"><span class="pre">(x,</span> <span class="pre">y)</span></code> nodal coordinates in pixel space.</p>
+</div></blockquote>
+<p><strong>elems</strong> : List[(int, int)]</p>
+<blockquote>
+<div><p>List of indices into <code class="docutils literal"><span class="pre">nodes</span></code></p>
+</div></blockquote>
+<p><strong>strut_radius</strong> : int</p>
+<blockquote>
+<div><p>Radius of each strut in pixels.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>dic_data</strong> : dict</p>
+<blockquote class="last">
+<div><p>DIC data with transverse displacement added.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic.video">
+<span id="dic-video-module"></span><h2>dic.video module<a class="headerlink" href="#module-dic.video" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="dic.video.export_frames">
+<code class="descclassname">dic.video.</code><code class="descname">export_frames</code><span class="sig-paren">(</span><em>frame_creator</em>, <em>output_directory=None</em>, <em>output_filename='frame.png'</em>, <em>savefig_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/video.html#export_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.video.export_frames" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports video frames by calling <code class="docutils literal"><span class="pre">frame_creator(i)</span></code> where <code class="docutils literal"><span class="pre">i</span></code> is the iteration number
+belonging to the range <code class="docutils literal"><span class="pre">[0,</span> <span class="pre">len(frame_creator)]</span></code>. Therefore, the <code class="docutils literal"><span class="pre">frame_creator</span></code> must be
+callable and accept a single argument <code class="docutils literal"><span class="pre">i</span></code>. The <code class="docutils literal"><span class="pre">frame_creator</span></code> must also define the
+<code class="docutils literal"><span class="pre">__len__</span></code> method that returns the number frames that the creator intends to create.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>frame_creator</strong> : callable</p>
+<blockquote>
+<div><p>Object responsible for creating the frame. As input the <code class="docutils literal"><span class="pre">frame_creator</span></code> will be called with the frame number
+<code class="docutils literal"><span class="pre">i</span></code> and is expected to return a figure of type <code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code>. The object must define
+<code class="docutils literal"><span class="pre">__call__(self,</span> <span class="pre">i)</span></code> and <code class="docutils literal"><span class="pre">__len(self)__</span></code> methods.</p>
+</div></blockquote>
+<p><strong>output_directory</strong> : str, optional</p>
+<blockquote>
+<div><p>Directory to place the frames into, If <code class="docutils literal"><span class="pre">None</span></code> is specified the frames will be placed in the current
+working directory.</p>
+</div></blockquote>
+<p><strong>output_filename</strong> : str, optional</p>
+<blockquote>
+<div><p>Filename to save the frames as. The frame number will be appending to the output automatically.</p>
+</div></blockquote>
+<p><strong>savefig_options</strong> : dict, optional</p>
+<blockquote class="last">
+<div><p>Keyword arguments to pass to <code class="docutils literal"><span class="pre">matplotlib.pyplot.savefig</span></code>.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="dic.video.image_sequence_to_video">
+<code class="descclassname">dic.video.</code><code class="descname">image_sequence_to_video</code><span class="sig-paren">(</span><em>input_template</em>, <em>output_filename</em>, <em>crf=23</em>, <em>scale=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/video.html#image_sequence_to_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.video.image_sequence_to_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts an image sequence into a video using FFMPEG.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>input_template</strong> : str</p>
+<blockquote>
+<div><p>The <code class="docutils literal"><span class="pre">-i</span></code> parameter passed to FFMPEG. This should specify the naming convention of the image sequence, e.g. <code class="docutils literal"><span class="pre">frame_%03d.png</span></code>.</p>
+</div></blockquote>
+<p><strong>output_filename</strong> : str</p>
+<blockquote>
+<div><p>Name of file to save the movie to, e.g. <code class="docutils literal"><span class="pre">movie.mp4</span></code>.</p>
+</div></blockquote>
+<p><strong>scale</strong> : (int, int), optional</p>
+<blockquote>
+<div><p>Video scale in the format <code class="docutils literal"><span class="pre">(width,</span> <span class="pre">height)</span></code> in pixels. If you&#8217;d like to keep the aspect ratio and scale only
+one dimension, set the value for the direction desired and use the value <code class="docutils literal"><span class="pre">-1</span></code> for the other dimension,
+e.g. <code class="docutils literal"><span class="pre">(720,</span> <span class="pre">-1)</span></code> for 720p video resolution. The default is <code class="docutils literal"><span class="pre">None</span></code> which resizes the image such that the width
+and height are divisible by 2 (a requirement of the video encoder) but tries to keep the resolution as
+close to the original image as possible.</p>
+</div></blockquote>
+<p><strong>crf</strong> : int [0-51], optional</p>
+<blockquote class="last">
+<div><p>The range of the quantizer scale is 0-51: where 0 is lossless, 23 is default, and 51 is worst possible.
+A lower value is a higher quality and a subjectively sane range is 18-28. Consider 18 to be visually lossless
+or nearly so: it should look the same or nearly the same as the input but it isn&#8217;t technically lossless.
+The range is exponential, so increasing the CRF value +6 is roughly half the bitrate while -6 is roughly
+twice the bitrate. General usage is to choose the highest CRF value that still provides an acceptable quality.
+If the output looks good, then try a higher value and if it looks bad then choose a lower value.
+(credit: <a class="reference external" href="https://trac.ffmpeg.org/wiki/Encode/H.264">https://trac.ffmpeg.org/wiki/Encode/H.264</a>)</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-dic">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-dic" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="modules.html" class="btn btn-neutral" title="dic" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

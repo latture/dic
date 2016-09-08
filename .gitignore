@@ -1,7 +1,0 @@
-docs/build
-.DS_Store
-.idea
-.ipynb_checkpoints
-*.pyc
-sample_*
-dic_*

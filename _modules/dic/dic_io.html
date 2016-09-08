@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.dic_io &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.dic_io</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.dic_io</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="kn">as</span> <span class="nn">mp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="kn">as</span> <span class="nn">spio</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;load_dic_data&quot;</span><span class="p">,</span> <span class="s2">&quot;load_csv_data&quot;</span><span class="p">,</span> <span class="s2">&quot;get_filenames&quot;</span><span class="p">,</span> <span class="s2">&quot;get_image_filenames&quot;</span><span class="p">,</span> <span class="s2">&quot;update_dic_data&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="get_filenames"><a class="viewcode-back" href="../../dic.html#dic.dic_io.get_filenames">[docs]</a><span class="k">def</span> <span class="nf">get_filenames</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="n">prepend_directory</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves a sorted list of file names in the specified directory with the given extension.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str</span>
+<span class="sd">        Directory to search.</span>
+<span class="sd">    extension : str</span>
+<span class="sd">        Extension to search for (including the period, if applicable).</span>
+<span class="sd">    prepend_directory : bool, optional</span>
+<span class="sd">        Whether to prepend the directory to the filenames. Default = ``False``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[str]</span>
+<span class="sd">        Sorted list of file names that match the given extension</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+        <span class="n">fbase</span><span class="p">,</span> <span class="n">fext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fext</span> <span class="o">==</span> <span class="n">extension</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">prepend_directory</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">output</span><span class="p">):</span>
+            <span class="n">output</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<div class="viewcode-block" id="get_image_filenames"><a class="viewcode-back" href="../../dic.html#dic.dic_io.get_image_filenames">[docs]</a><span class="k">def</span> <span class="nf">get_image_filenames</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="o">=</span><span class="s2">&quot;.tif&quot;</span><span class="p">,</span> <span class="n">prepend_directory</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Sorts and retrieves the camera images in the specified directory. This function assumes that the left camera images</span>
+<span class="sd">    end in ``_0.ext``, where ``.ext`` is the provided extension. Similarly, the right camera images are assumed to</span>
+<span class="sd">    end in ``_1.ext``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    directory : str</span>
+<span class="sd">        Directory to search.</span>
+<span class="sd">    extension : str, optional</span>
+<span class="sd">        Image extension. Default = ``&quot;.tif&quot;``.</span>
+<span class="sd">    prepend_directory : bool, optional</span>
+<span class="sd">        Whether to prepend the directory to the filenames. Default = ``False``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (left_camera_filenames, right_camera_filenames) : (List[str], List[str])</span>
+<span class="sd">        List of filenames belonging to each camera.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">filenames</span> <span class="o">=</span> <span class="n">get_filenames</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">extension</span><span class="p">,</span> <span class="n">prepend_directory</span><span class="o">=</span><span class="n">prepend_directory</span><span class="p">)</span>
+    <span class="n">left_camera_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">right_camera_filenames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">left_camera_required_text</span> <span class="o">=</span> <span class="s2">&quot;_0{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span>
+    <span class="n">right_camera_required_text</span> <span class="o">=</span> <span class="s2">&quot;_1{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">filenames</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">left_camera_required_text</span><span class="p">):]</span> <span class="o">==</span> <span class="n">left_camera_required_text</span><span class="p">:</span>
+            <span class="n">left_camera_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">f</span><span class="p">[</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">right_camera_required_text</span><span class="p">):]</span> <span class="o">==</span> <span class="n">right_camera_required_text</span><span class="p">:</span>
+            <span class="n">right_camera_filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unable to categorize file {} as belonging to the left or right camera.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">left_camera_filenames</span><span class="p">,</span> <span class="n">right_camera_filenames</span></div>
+
+
+<span class="k">def</span> <span class="nf">_mask_bad_data</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="n">mask_key</span><span class="o">=</span><span class="s2">&quot;sigma&quot;</span><span class="p">,</span> <span class="n">bad_value</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Masks (i.e. removes) the uncorrelated data for each key in the dictionary. The positions of bad values are</span>
+<span class="sd">    determined by the entries of ``dic_data[mask_key]`` that are equal to ``bad_value``. The same mask is</span>
+<span class="sd">    applied to all keys in the dictionary that reference correlated data. The only keys not updated are ``x`` and ``y``</span>
+<span class="sd">    --those correspond to the pixel positions and are not dependent on whether the correlation was successful--</span>
+<span class="sd">    as well as double underscore keys, e.g. ``__key__``. This assumes that all correlated values in the</span>
+<span class="sd">    dictionary have the same shape. The dictionary is updated in-place. The keys remain the same, but the values are</span>
+<span class="sd">    masked after the function call.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary of ``{key: value}`` pairs.</span>
+<span class="sd">    mask_key : str</span>
+<span class="sd">        Key in ``dic_data`` to search for ``bad_value``s</span>
+<span class="sd">    bad_value : float</span>
+<span class="sd">        Value that corresponds to uncorrelated data for the specified ``mask_key``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">bad_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">dic_data</span><span class="p">[</span><span class="n">mask_key</span><span class="p">],</span> <span class="n">bad_value</span><span class="p">)</span>
+    <span class="n">unmasked_keys</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">dic_data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="n">key</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;__&#39;</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">unmasked_keys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="n">mask_key</span><span class="p">:</span>
+                <span class="n">fill_value</span> <span class="o">=</span> <span class="n">bad_value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">fill_value</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="n">dic_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">bad_mask</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">fill_value</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_unmask_bad_data</span><span class="p">(</span><span class="n">dic_data</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Unmasks the data for each key in the dictionary by replacing all ``numpy.MaskedArray``s with the their unmasked data.</span>
+<span class="sd">    The keys remain the same, but the all ``numpy.MaskedArray`` instances are converted to ``numpy.ndarray``.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary of ``{key: value}`` pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">iter</span><span class="p">(</span><span class="n">dic_data</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
+            <span class="n">dic_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_dic_data"><a class="viewcode-back" href="../../dic.html#dic.dic_io.load_dic_data">[docs]</a><span class="k">def</span> <span class="nf">load_dic_data</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">variable_names</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads the DIC data specified by the given filename. Uncorrelated regions of the dataset are masked (i.e. removed)</span>
+<span class="sd">    before the data is returned. Prior to loading the data must be exported into the Matlab (``.mat``) file format.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Name of the DIC data file to load.</span>
+<span class="sd">    variable_names : None or sequence</span>
+<span class="sd">        If ``None`` (the default) - read all variables in file. Otherwise variable_names should be a sequence of</span>
+<span class="sd">        strings, giving names of the matlab variables to read from the file. The reader will skip any variable</span>
+<span class="sd">        with a name not in this sequence, possibly saving some read processing.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dict</span>
+<span class="sd">        A dictionary of ``{key: value}`` pairs where each key is the variable name,</span>
+<span class="sd">        e.g. ``X``, ``U``, ``Z``, etc., and the value is a 2D numpy array containing the</span>
+<span class="sd">        exported DIC results.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dic_data</span> <span class="o">=</span> <span class="n">spio</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">variable_names</span><span class="o">=</span><span class="n">variable_names</span><span class="p">)</span>
+    <span class="n">_mask_bad_data</span><span class="p">(</span><span class="n">dic_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dic_data</span></div>
+
+
+<span class="k">def</span> <span class="nf">_get_csv_header_names</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the column headers for the given filename.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Name of the ``.csv`` file to search.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    List[str] or None</span>
+<span class="sd">        List of header names or ``None`` is no header was found.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    RuntimeError</span>
+<span class="sd">        If the first entry of the first row is not 0 or Count.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">csvfile</span><span class="p">:</span>
+        <span class="n">first_line</span> <span class="o">=</span> <span class="n">csvfile</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">first_line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;0&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">elif</span> <span class="n">names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Count&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">names</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;Could not determine header.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="load_csv_data"><a class="viewcode-back" href="../../dic.html#dic.dic_io.load_csv_data">[docs]</a><span class="k">def</span> <span class="nf">load_csv_data</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">column</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Loads the specifed column of the csv data from the given filename. Values are multiplied by ``scale`` before the</span>
+<span class="sd">    data is returned.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Name of the ``.csv`` file to load.</span>
+<span class="sd">    column : int</span>
+<span class="sd">        Column index to load from the file.</span>
+<span class="sd">    scale : float, optional</span>
+<span class="sd">        Value to scale the data by before returning. For example, when loading MTS data the scale variable</span>
+<span class="sd">        can be used to change the native output (Volts) to force (N) by providing ``scale`` that is equal to</span>
+<span class="sd">        the Newtons/Volts. Default is ``None``.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``numpy.ndarray``</span>
+<span class="sd">        1D array of data values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">header_names</span> <span class="o">=</span> <span class="n">_get_csv_header_names</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">header_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">header_row</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">header_row</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="n">csv_dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="n">header_row</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="n">header_names</span><span class="p">)</span>
+    <span class="n">csv_values</span> <span class="o">=</span> <span class="n">csv_dataframe</span><span class="o">.</span><span class="n">ix</span><span class="p">[:,</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+    <span class="k">if</span> <span class="n">scale</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">csv_values</span> <span class="o">*=</span> <span class="n">scale</span>
+    <span class="k">return</span> <span class="n">csv_values</span></div>
+
+
+<span class="k">def</span> <span class="nf">_update_dic_data_worker</span><span class="p">(</span><span class="n">worker_args</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Processes a single DIC file and saves the output.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    worker_args : (str, callable, tuple, str, str, bool)</span>
+<span class="sd">        Arguments needed to process a single DIC file,</span>
+<span class="sd">        namely ``(dic_filename, function, args, input_directory, output_directory, compress)``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">dic_filename</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">input_directory</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">compress</span> <span class="o">=</span> <span class="n">worker_args</span>
+    <span class="n">dic_data</span> <span class="o">=</span> <span class="n">load_dic_data</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">input_directory</span><span class="p">,</span> <span class="n">dic_filename</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">function</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">function</span><span class="p">(</span><span class="n">dic_data</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+    <span class="n">_unmask_bad_data</span><span class="p">(</span><span class="n">dic_data</span><span class="p">)</span>
+    <span class="n">output_filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">dic_filename</span><span class="p">)</span>
+    <span class="n">spio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="n">dic_data</span><span class="p">,</span> <span class="n">do_compression</span><span class="o">=</span><span class="n">compress</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="update_dic_data"><a class="viewcode-back" href="../../dic.html#dic.dic_io.update_dic_data">[docs]</a><span class="k">def</span> <span class="nf">update_dic_data</span><span class="p">(</span><span class="n">input_directory</span><span class="p">,</span> <span class="n">output_directory</span><span class="p">,</span> <span class="n">function</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">compress</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">processes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calls ``function`` on each DIC file and saves the new version into the output directory.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    input_directory : str</span>
+<span class="sd">        Path to uncompressed ``.mat`` files.</span>
+<span class="sd">    output_directory : str</span>
+<span class="sd">        Where to save the compressed files.</span>
+<span class="sd">    function : callable, optional</span>
+<span class="sd">        Function that accepts a ``dict`` and modifies the object in place. Default is ``None``, i.e. no function</span>
+<span class="sd">        is called.</span>
+<span class="sd">    args : tuple, optional</span>
+<span class="sd">        Extra arguments passed to function, i.e. ``f(dic_data, *args)``.</span>
+<span class="sd">    output_directory : str</span>
+<span class="sd">        Directory to store the results.</span>
+<span class="sd">    compress : bool, optional</span>
+<span class="sd">        Whether to compress the DIC files when saving to the output directory.</span>
+<span class="sd">    processes : int, optional</span>
+<span class="sd">        The number of processes to use when converting the files. Default is ``None``.</span>
+<span class="sd">        If ``None`` is provided then the number of processes will be set to the value</span>
+<span class="sd">        returned by ``multiprocessing.cpu_count()``.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">output_directory</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_directory</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,)</span>
+
+    <span class="n">dic_filenames</span> <span class="o">=</span> <span class="n">get_filenames</span><span class="p">(</span><span class="n">input_directory</span><span class="p">,</span> <span class="s2">&quot;.mat&quot;</span><span class="p">)</span>
+    <span class="n">num_dic_filenames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dic_filenames</span><span class="p">)</span>
+
+    <span class="n">worker_args</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">dic_filenames</span><span class="p">,</span>
+            <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">function</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">),</span>
+            <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">),</span>
+            <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">input_directory</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">),</span>
+            <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">output_directory</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">),</span>
+            <span class="n">itertools</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">compress</span><span class="p">,</span> <span class="n">num_dic_filenames</span><span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">processes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">processes</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">processes</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">imap_unordered</span><span class="p">(</span><span class="n">_update_dic_data_worker</span><span class="p">,</span> <span class="n">worker_args</span><span class="p">),</span>
+                  <span class="n">total</span><span class="o">=</span><span class="n">num_dic_filenames</span><span class="p">,</span> <span class="nb">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Processing DIC files&quot;</span><span class="p">):</span>
+        <span class="k">pass</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+
+    <span class="k">print</span><span class="p">(</span><span class="s2">&quot;DIC files updated.&quot;</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

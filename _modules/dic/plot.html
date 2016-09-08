@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>dic.plot &mdash; dic 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="dic 0.1 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> dic
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">dic</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../index.html">dic</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      
+    <li>dic.plot</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for dic.plot</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">show</span><span class="p">,</span> <span class="n">savefig</span>
+<span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="kn">as</span> <span class="nn">mpimg</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">.dic_io</span> <span class="kn">import</span> <span class="n">load_dic_data</span>
+<span class="kn">from</span> <span class="nn">.scale</span> <span class="kn">import</span> <span class="n">px_per_mm</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;plot_overlay&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_xy&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_colorbar&quot;</span><span class="p">,</span> <span class="s2">&quot;show&quot;</span><span class="p">,</span> <span class="s2">&quot;savefig&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="plot_overlay"><a class="viewcode-back" href="../../dic.html#dic.plot.plot_overlay">[docs]</a><span class="k">def</span> <span class="nf">plot_overlay</span><span class="p">(</span><span class="n">image_filename</span><span class="p">,</span> <span class="n">dic_data</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">contour_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">add_colorbar</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span>
+                 <span class="n">colorbar_title</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">colorbar_options</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots a filled contour overlay on top of the specified image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    image_filename : str</span>
+<span class="sd">        Name of file containing the background image.</span>
+<span class="sd">    dic_data : dict</span>
+<span class="sd">        Dictionary containing the DIC data (usually loaded from a ``.mat`` file).</span>
+<span class="sd">    key : str</span>
+<span class="sd">        Name of the key to use as the overlay variable. The key must be present in the data loaded from ``dic_filename``.</span>
+<span class="sd">    fig : ``matplotlib.figure.Figure``, optional</span>
+<span class="sd">        Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this</span>
+<span class="sd">        nor ``ax`` is specified, a new figure and axis will be created.</span>
+<span class="sd">    ax : ``matplotlib.axes.Axes``, optional</span>
+<span class="sd">        Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#39;s current</span>
+<span class="sd">        axes. If neither this nor ``fig`` is specified a new axes object will be created.</span>
+<span class="sd">    contour_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when calling ``matplotlib.pyplot.contourf``. Default is ``None``</span>
+<span class="sd">        Valid keys are ``corner_mask``, ``alpha``, ``cmap``, ``levels``, ``extend``, etc.</span>
+<span class="sd">        See ``matplotlib.pyplot.contourf`` for all valid keys.</span>
+<span class="sd">    add_colorbar : bool, optional</span>
+<span class="sd">        Whether to add a colorbar to the overlay axes. Default is ``False``.</span>
+<span class="sd">    colorbar_title : str, optional</span>
+<span class="sd">        Title to add to the colorbar. Default is ``None``. If ``None`` is provided, the title is set to the ``key``.</span>
+<span class="sd">    colorbar_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when adding a colorbar to the overlay. Default is ``None``. If ``None`` is provided</span>
+<span class="sd">        the colorbar will be shrunk slightly such that the color bar is roughly the same height as the overlay.</span>
+<span class="sd">        Valid key word arguments include ``ticks``, ``format``, ``orientation``, etc.</span>
+<span class="sd">        See ``matplotlib.figure.colorbar`` for all options.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``matplotlib.figure.Figure``, ``matplotlib.axes.Axes``</span>
+<span class="sd">        Figure and axes containing the background image and contour overlay.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">mpimg</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">image_filename</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
+    <span class="n">scale</span> <span class="o">=</span> <span class="n">px_per_mm</span><span class="p">(</span><span class="n">dic_data</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;U&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">dic_data</span><span class="p">[</span><span class="s2">&quot;V&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">dic_data</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">contour_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">contour_options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s2">&quot;levels&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contour_options</span> <span class="ow">and</span> <span class="n">z</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">():</span>
+        <span class="n">contour_options</span><span class="p">[</span><span class="s2">&quot;levels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">z</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;cmap&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contour_options</span><span class="p">:</span>
+        <span class="n">contour_options</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span>
+    <span class="k">if</span> <span class="s2">&quot;extend&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">contour_options</span><span class="p">:</span>
+        <span class="n">contour_options</span><span class="p">[</span><span class="s2">&quot;extend&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;both&quot;</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">gray</span><span class="p">)</span>
+    <span class="n">cs</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">contourf</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">contour_options</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">add_colorbar</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">colorbar_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">colorbar_options</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;shrink&quot;</span><span class="p">:</span> <span class="mf">0.9</span>
+            <span class="p">}</span>
+        <span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">cs</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">colorbar_options</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">colorbar_title</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">colorbar_title</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="plot_xy"><a class="viewcode-back" href="../../dic.html#dic.plot.plot_xy">[docs]</a><span class="k">def</span> <span class="nf">plot_xy</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figure_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">axes_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">plot_options</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Plots the given x, y data.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x : List[T]</span>
+<span class="sd">        X data points.</span>
+<span class="sd">    y : List[T]</span>
+<span class="sd">        Y data points.</span>
+<span class="sd">    fig : ``matplotlib.figure.Figure``, optional</span>
+<span class="sd">        Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this</span>
+<span class="sd">        nor ``ax`` is specified, a new figure and axis will be created.</span>
+<span class="sd">    ax : ``matplotlib.axes.Axes``, optional</span>
+<span class="sd">        Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#39;s current</span>
+<span class="sd">        axes. If neither this nor ``fig`` is specified a new axes object will be created.</span>
+<span class="sd">    figure_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when creating the figure. Default is ``None``.</span>
+<span class="sd">        Valid keys are ``figsize``, ``dpi``, ``facecolor``, ``edgecolor``, ``linewidth``, ``frameon``, ``subplotpars``,</span>
+<span class="sd">        and ``tight_layout``.</span>
+<span class="sd">    axes_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when adding an axis to the figure. Default is ``None``.</span>
+<span class="sd">        Valid keys are legal ``matplotlib.axes.Axes`` kwargs plus projection, which chooses a projection type</span>
+<span class="sd">        for the axes.</span>
+<span class="sd">    plot_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when plotting the data on the axis. Default is ``None``.</span>
+<span class="sd">        Valid keys are ``matplotlib.lines.Line2D`` properties, e.g. ``alpha``, ``color``, ``label``, etc.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``matplotlib.figure.Figure``, ``matplotlib.axes.Axes``</span>
+<span class="sd">        Figure and axes containing the x-y data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">figure_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">figure_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">axes_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">figure_options</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="o">**</span><span class="n">axes_options</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">plot_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">plot_options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">plot_options</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+
+
+<div class="viewcode-block" id="plot_colorbar"><a class="viewcode-back" href="../../dic.html#dic.plot.plot_colorbar">[docs]</a><span class="k">def</span> <span class="nf">plot_colorbar</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">figure_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">axes_options</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">colorbar_options</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Creates a colorbar of the specified name and normalization.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    cmap : str</span>
+<span class="sd">        Name of the Matplotlib colorbar.</span>
+<span class="sd">    vmin : float</span>
+<span class="sd">        Lower limit of the normalization.</span>
+<span class="sd">    vmax : float</span>
+<span class="sd">        Upper limit of the normalization.</span>
+<span class="sd">    fig : ``matplotlib.figure.Figure``, optional</span>
+<span class="sd">        Figure to add overlay to. If not specified, the figure will be taken from the specified axes. If neither this</span>
+<span class="sd">        nor ``ax`` is specified, a new figure and axis will be created.</span>
+<span class="sd">    ax : ``matplotlib.axes.Axes``, optional</span>
+<span class="sd">        Axes object to add the overlay to. If not specified the axes will be taken from the given figure&#39;s current</span>
+<span class="sd">        axes. If neither this nor ``fig`` is specified a new axes object will be created.</span>
+<span class="sd">    figure_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when creating the figure. Default is ``None``.</span>
+<span class="sd">        Valid keys are ``figsize``, ``dpi``, ``facecolor``, ``edgecolor``, ``linewidth``, ``frameon``, ``subplotpars``,</span>
+<span class="sd">        and ``tight_layout``.</span>
+<span class="sd">    axes_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when adding an axis to the figure. Default is ``None``.</span>
+<span class="sd">        Valid keys are legal ``matplotlib.axes.Axes`` kwargs plus projection, which chooses a projection type</span>
+<span class="sd">        for the axes.</span>
+<span class="sd">    colorbar_options : dict, optional</span>
+<span class="sd">        Keyword arguments to use when adding the colorbar to the axes. Valid keys are ``orientation``, ``ticks``, etc.</span>
+<span class="sd">        See ``matplotlib.colorbar.ColorbarBase`` for more valid keyword arguments.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ``matplotlib.figure.Figure``, ``matplotlib.axes.Axes``</span>
+<span class="sd">        Figure and axes containing the colorbar.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">figure_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">figure_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">axes_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes_options</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="o">**</span><span class="n">figure_options</span><span class="p">)</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="o">**</span><span class="n">axes_options</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">fig</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_figure</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">colorbar_options</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">colorbar_options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s2">&quot;orientation&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">colorbar_options</span><span class="p">:</span>
+        <span class="n">colorbar_options</span><span class="p">[</span><span class="s2">&quot;orientation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;vertical&quot;</span>
+
+    <span class="n">norm</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">)</span>
+    <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
+    <span class="n">mpl</span><span class="o">.</span><span class="n">colorbar</span><span class="o">.</span><span class="n">ColorbarBase</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="o">**</span><span class="n">colorbar_options</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Ryan Latture.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
