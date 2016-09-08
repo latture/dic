@@ -8,7 +8,7 @@ This repository contains the tools needed to process digital image correlation (
 - creating video frames and turning the image sequence into a video
 
 The reference IPython notebook shown `here <https://nbviewer.jupyter.org/github/latture/dic/blob/master/reference_dic_notebook.ipynb>`_
-an example of how to create a video that matches a sequence of DIC overlays to the corresponding stress-strain curve.
+describes how to create a video that matches a sequence of DIC overlays to the corresponding stress-strain curve.
 To ensure that all the required packages are available, navigate to the ``dic`` folder in the terminal and execute::
 
     >>> pip install -r requirements.txt
