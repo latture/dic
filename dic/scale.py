@@ -1,3 +1,8 @@
+"""
+The :mod:`dic.scale` module provides functions that will determine the millimeters per pixel (or pixels per millimeter)
+for a given DIC data file.
+
+"""
 from __future__ import absolute_import, division, print_function
 import numpy as np
 

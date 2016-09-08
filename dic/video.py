@@ -1,3 +1,8 @@
+"""
+The :mod:`dic.video` module provides functions to export video frames and convert an image sequence to a video.
+The latter assumes the FFMPEG is installed and available on your path.
+
+"""
 from __future__ import absolute_import, division, print_function
 import itertools
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas

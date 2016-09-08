@@ -1,3 +1,8 @@
+"""
+The :mod:`dic.smooth` module allows a vector of data to be smoothed, often alleviating some of the undesired spikes that
+occurs during data acquisition.
+
+"""
 from __future__ import absolute_import, division, print_function
 import numpy as np
 

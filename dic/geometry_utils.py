@@ -1,3 +1,9 @@
+"""
+The ``geometry_utils`` module contain utility functions (not specific to DIC) that aid in applying geometric transformations
+or determining spatial relationships between data point, usually in 3D space.
+
+"""
+
 from math import acos, cos, sin, sqrt
 import numpy as np
 from numba import jit

@@ -1,3 +1,9 @@
+"""
+``dic_io`` provides IO operations for DIC and associated files.
+This includes loading (and possibly modifying) DIC data from ``.MAT`` files and MTS data from ``.CSV`` files.
+In addition, the ability to find and sort image (or general) filenames is provided.
+
+"""
 from __future__ import absolute_import, division, print_function
 import itertools
 import multiprocessing as mp

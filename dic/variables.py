@@ -1,3 +1,7 @@
+"""
+The :mod:`dic.variables` module provides custom variables that can be added to DIC data as a ``{key: value}`` pair
+to an existing dictionary.
+"""
 from __future__ import absolute_import, division, print_function
 from math import acos
 import numpy as np

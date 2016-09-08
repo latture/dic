@@ -1,3 +1,12 @@
+"""
+This submodule holds the frame creators that produce an image sequence that will be converted into a movie.
+A frame creator is an object that when called with the frame number will return the corresponding frame as a
+``matplotlib.figure.Figure`` object and has a length (i.e. ``__len__``) equal to the number of frames it intends to create.
+
+Feel free to add you own frame creator. I will periodically update this to include more as I (or others) need them.
+
+"""
+
 from __future__ import absolute_import, division, print_function
 from matplotlib.figure import Figure
 from matplotlib.gridspec import GridSpec

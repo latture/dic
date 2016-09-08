@@ -1,3 +1,14 @@
+"""
+The ``extensometer`` module provides a means of easily creating and analyzing extensometers. An extensometer is
+defined by two nodal locations connected by a straight line. Metrics can be extracted from extensometers such as
+the length, angle, strain, etc. If the same metric needs to be extracted from the same extensometer for several
+DIC files, then the ``extensometer_sequence`` allows a set of DIC filenames, extensometers and metric to be provided,
+and the relevant metric will be extracted for the given extensometers for all the DIC files. Placing extensometers
+can be accomplished by using the ``place_extensometers`` function which, when given the reference image and DIC filenames,
+allows extensometer placement by clicking on a Matplotlib figure.
+
+"""
+
 from __future__ import absolute_import, division, print_function
 from collections import namedtuple, Iterable
 import itertools

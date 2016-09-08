@@ -1,3 +1,8 @@
+"""
+``dic_utils`` contains several utility functions used when analyzing DIC data, e.g. determining the step size,
+going from pixel to millimeter coordinates, and determining deformations.
+
+"""
 import numpy as np
 
 __all__ = ["get_step", "point_to_indices", "get_initial_position", "get_displacement", "point_to_position"]

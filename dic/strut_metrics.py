@@ -1,3 +1,9 @@
+"""
+The :mod:`dic.strut_metrics` implements metrics useful when analyzing lattices or strut-like structures.
+
+These will be added as needed.
+"""
+
 from __future__ import absolute_import, division, print_function
 from .extensometer import extensometer_angle, extensometer_sequence
 

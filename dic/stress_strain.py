@@ -1,3 +1,10 @@
+"""
+The :mod:`dic.stress_strain` module provides a function that will calculate the stress-strain response from a set
+of DIC files and the corresponding extensometers and test parameters ``force`` as measured from the MTS and sample
+area. The latter two are required to calculate stress, and the extensometers are used to calculate an average strain.
+
+"""
+
 from __future__ import absolute_import, division, print_function
 import numpy as np
 from .extensometer import extensometer_strain, extensometer_sequence

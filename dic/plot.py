@@ -1,3 +1,10 @@
+"""
+The ``plot`` module contains the functions needed to display DIC overlays using :func:`dic.plot.plot_overlay` and ``(x,y)`` data using
+:func:`dic.plot.plot_overlay`. Because the default colorbars from Matplotlib can be somewhat underwhelming (and produce unintended
+effects when adding them to an existing figure) the :func:`dic.plot.plot_colorbar` function allows explicit creation of the desired
+colorbar.
+
+"""
 from __future__ import absolute_import, division, print_function
 import matplotlib as mpl
 import matplotlib.pyplot as plt
