@@ -2,10 +2,10 @@ DIC
 ===
 This repository contains the tools needed to process digital image correlation (DIC) files. This includes:
 
-  * loading, saving and compressing ``*.MAT`` files
-  * placing and analyzing extensometers
-  * plotting (x,y) data and contour overlays
-  * creating video frames and turning the image sequence into a video
+- loading, saving and compressing ``*.MAT`` files
+- placing and analyzing extensometers
+- plotting (x,y) data and contour overlays
+- creating video frames and turning the image sequence into a video
 
 The reference IPython notebook shows an example of how to create a video that matches a sequence of DIC overlays to the
 corresponding stress-strain curve shown below. See the documentation website_ for details on all the available functions.
