@@ -6,8 +6,8 @@ import os
 import pandas as pd
 import scipy.io as spio
 import sys
+from tqdm import tqdm
 import warnings
-from .tqdm import tqdm
 
 __all__ = ["load_dic_data", "load_csv_data", "get_filenames", "get_image_filenames", "update_dic_data"]
 
