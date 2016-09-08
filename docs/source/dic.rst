@@ -1,8 +1,5 @@
-dic package
-===========
-
 Submodules
-----------
+==========
 
 dic.dic_io module
 -----------------
@@ -96,15 +93,6 @@ dic.video module
 ----------------
 
 .. automodule:: dic.video
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-
-Module contents
----------------
-
-.. automodule:: dic
     :members:
     :undoc-members:
     :show-inheritance:
