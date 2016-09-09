@@ -1,6 +1,6 @@
 """
-The ``geometry_utils`` module contain utility functions (not specific to DIC) that aid in applying geometric transformations
-or determining spatial relationships between data point, usually in 3D space.
+The :mod:`dic.geometry_utils` module contain utility functions (not specific to DIC) that aid in applying geometric
+transformations or determining spatial relationships between data point, usually in 3D space.
 
 """
 

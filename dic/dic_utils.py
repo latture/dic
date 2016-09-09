@@ -1,5 +1,5 @@
 """
-``dic_utils`` contains several utility functions used when analyzing DIC data, e.g. determining the step size,
+:mod:`dic_utils` contains several utility functions used when analyzing DIC data, e.g. determining the step size,
 going from pixel to millimeter coordinates, and determining deformations.
 
 """

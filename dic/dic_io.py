@@ -1,5 +1,5 @@
 """
-``dic_io`` provides IO operations for DIC and associated files.
+:mod:`dic.dic_io` provides IO operations for DIC and associated files.
 This includes loading (and possibly modifying) DIC data from ``.MAT`` files and MTS data from ``.CSV`` files.
 In addition, the ability to find and sort image (or general) filenames is provided.
 
