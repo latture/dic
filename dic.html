@@ -152,7 +152,7 @@
 <h1>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-dic.dic_io">
 <span id="dic-dic-io-module"></span><h2>dic.dic_io module<a class="headerlink" href="#module-dic.dic_io" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">dic_io</span></code> provides IO operations for DIC and associated files.
+<p><a class="reference internal" href="#module-dic.dic_io" title="dic.dic_io"><code class="xref py py-mod docutils literal"><span class="pre">dic.dic_io</span></code></a> provides IO operations for DIC and associated files.
 This includes loading (and possibly modifying) DIC data from <code class="docutils literal"><span class="pre">.MAT</span></code> files and MTS data from <code class="docutils literal"><span class="pre">.CSV</span></code> files.
 In addition, the ability to find and sort image (or general) filenames is provided.</p>
 <dl class="function">
@@ -337,7 +337,7 @@ returned by <code class="docutils literal"><span class="pre">multiprocessing.cpu
 </div>
 <div class="section" id="module-dic.dic_utils">
 <span id="dic-dic-utils-module"></span><h2>dic.dic_utils module<a class="headerlink" href="#module-dic.dic_utils" title="Permalink to this headline">¶</a></h2>
-<p><code class="docutils literal"><span class="pre">dic_utils</span></code> contains several utility functions used when analyzing DIC data, e.g. determining the step size,
+<p><code class="xref py py-mod docutils literal"><span class="pre">dic_utils</span></code> contains several utility functions used when analyzing DIC data, e.g. determining the step size,
 going from pixel to millimeter coordinates, and determining deformations.</p>
 <dl class="function">
 <dt id="dic.dic_utils.get_step">
@@ -491,12 +491,12 @@ in the specified DIC data.</p>
 </div>
 <div class="section" id="module-dic.extensometer">
 <span id="dic-extensometer-module"></span><h2>dic.extensometer module<a class="headerlink" href="#module-dic.extensometer" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">extensometer</span></code> module provides a means of easily creating and analyzing extensometers. An extensometer is
+<p>The <a class="reference internal" href="#module-dic.extensometer" title="dic.extensometer"><code class="xref py py-mod docutils literal"><span class="pre">dic.extensometer</span></code></a> module provides a means of easily creating and analyzing extensometers. An extensometer is
 defined by two nodal locations connected by a straight line. Metrics can be extracted from extensometers such as
 the length, angle, strain, etc. If the same metric needs to be extracted from the same extensometer for several
-DIC files, then the <code class="docutils literal"><span class="pre">extensometer_sequence</span></code> allows a set of DIC filenames, extensometers and metric to be provided,
+DIC files, then the <a class="reference internal" href="#dic.extensometer.extensometer_sequence" title="dic.extensometer.extensometer_sequence"><code class="xref py py-func docutils literal"><span class="pre">dic.extensometer.extensometer_sequence()</span></code></a> function allows a set of DIC filenames, extensometers and metric to be provided,
 and the relevant metric will be extracted for the given extensometers for all the DIC files. Placing extensometers
-can be accomplished by using the <code class="docutils literal"><span class="pre">place_extensometers</span></code> function which, when given the reference image and DIC filenames,
+can be accomplished by using the <code class="xref py py-func docutils literal"><span class="pre">dic.extensometers.place_extensometers()</span></code> function which, when given the reference image and DIC filenames,
 allows extensometer placement by clicking on a Matplotlib figure.</p>
 <dl class="class">
 <dt id="dic.extensometer.Extensometer">
@@ -833,8 +833,8 @@ A frame creator is an object that when called with the frame number will return 
 </div>
 <div class="section" id="module-dic.geometry_utils">
 <span id="dic-geometry-utils-module"></span><h2>dic.geometry_utils module<a class="headerlink" href="#module-dic.geometry_utils" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">geometry_utils</span></code> module contain utility functions (not specific to DIC) that aid in applying geometric transformations
-or determining spatial relationships between data point, usually in 3D space.</p>
+<p>The <a class="reference internal" href="#module-dic.geometry_utils" title="dic.geometry_utils"><code class="xref py py-mod docutils literal"><span class="pre">dic.geometry_utils</span></code></a> module contain utility functions (not specific to DIC) that aid in applying geometric
+transformations or determining spatial relationships between data point, usually in 3D space.</p>
 <dl class="attribute">
 <dt id="dic.geometry_utils.norm">
 <code class="descclassname">dic.geometry_utils.</code><code class="descname">norm</code><a class="reference internal" href="_modules/dic/geometry_utils.html#norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.norm" title="Permalink to this definition">¶</a></dt>
@@ -1080,7 +1080,7 @@ scale, translation, and rotation.</p>
 </div>
 <div class="section" id="module-dic.plot">
 <span id="dic-plot-module"></span><h2>dic.plot module<a class="headerlink" href="#module-dic.plot" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal"><span class="pre">plot</span></code> module contains the functions needed to display DIC overlays using <a class="reference internal" href="#dic.plot.plot_overlay" title="dic.plot.plot_overlay"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_overlay()</span></code></a> and <code class="docutils literal"><span class="pre">(x,y)</span></code> data using
+<p>The <a class="reference internal" href="#module-dic.plot" title="dic.plot"><code class="xref py py-mod docutils literal"><span class="pre">dic.plot</span></code></a> module contains the functions needed to display DIC overlays using <a class="reference internal" href="#dic.plot.plot_overlay" title="dic.plot.plot_overlay"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_overlay()</span></code></a> and <code class="docutils literal"><span class="pre">(x,y)</span></code> data using
 <a class="reference internal" href="#dic.plot.plot_overlay" title="dic.plot.plot_overlay"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_overlay()</span></code></a>. Because the default colorbars from Matplotlib can be somewhat underwhelming (and produce unintended
 effects when adding them to an existing figure) the <a class="reference internal" href="#dic.plot.plot_colorbar" title="dic.plot.plot_colorbar"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_colorbar()</span></code></a> function allows explicit creation of the desired
 colorbar.</p>
