@@ -152,6 +152,9 @@
 <h1>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-dic.dic_io">
 <span id="dic-dic-io-module"></span><h2>dic.dic_io module<a class="headerlink" href="#module-dic.dic_io" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dic_io</span></code> provides IO operations for DIC and associated files.
+This includes loading (and possibly modifying) DIC data from <code class="docutils literal"><span class="pre">.MAT</span></code> files and MTS data from <code class="docutils literal"><span class="pre">.CSV</span></code> files.
+In addition, the ability to find and sort image (or general) filenames is provided.</p>
 <dl class="function">
 <dt id="dic.dic_io.load_dic_data">
 <code class="descclassname">dic.dic_io.</code><code class="descname">load_dic_data</code><span class="sig-paren">(</span><em>filename</em>, <em>variable_names=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_io.html#load_dic_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_io.load_dic_data" title="Permalink to this definition">¶</a></dt>
@@ -334,6 +337,8 @@ returned by <code class="docutils literal"><span class="pre">multiprocessing.cpu
 </div>
 <div class="section" id="module-dic.dic_utils">
 <span id="dic-dic-utils-module"></span><h2>dic.dic_utils module<a class="headerlink" href="#module-dic.dic_utils" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal"><span class="pre">dic_utils</span></code> contains several utility functions used when analyzing DIC data, e.g. determining the step size,
+going from pixel to millimeter coordinates, and determining deformations.</p>
 <dl class="function">
 <dt id="dic.dic_utils.get_step">
 <code class="descclassname">dic.dic_utils.</code><code class="descname">get_step</code><span class="sig-paren">(</span><em>dic_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/dic_utils.html#get_step"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.dic_utils.get_step" title="Permalink to this definition">¶</a></dt>
@@ -486,6 +491,13 @@ in the specified DIC data.</p>
 </div>
 <div class="section" id="module-dic.extensometer">
 <span id="dic-extensometer-module"></span><h2>dic.extensometer module<a class="headerlink" href="#module-dic.extensometer" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">extensometer</span></code> module provides a means of easily creating and analyzing extensometers. An extensometer is
+defined by two nodal locations connected by a straight line. Metrics can be extracted from extensometers such as
+the length, angle, strain, etc. If the same metric needs to be extracted from the same extensometer for several
+DIC files, then the <code class="docutils literal"><span class="pre">extensometer_sequence</span></code> allows a set of DIC filenames, extensometers and metric to be provided,
+and the relevant metric will be extracted for the given extensometers for all the DIC files. Placing extensometers
+can be accomplished by using the <code class="docutils literal"><span class="pre">place_extensometers</span></code> function which, when given the reference image and DIC filenames,
+allows extensometer placement by clicking on a Matplotlib figure.</p>
 <dl class="class">
 <dt id="dic.extensometer.Extensometer">
 <em class="property">class </em><code class="descclassname">dic.extensometer.</code><code class="descname">Extensometer</code><a class="reference internal" href="_modules/dic/extensometer.html#Extensometer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.extensometer.Extensometer" title="Permalink to this definition">¶</a></dt>
@@ -750,6 +762,10 @@ will create an extensometer.</p>
 </div>
 <div class="section" id="module-dic.frame_creators">
 <span id="dic-frame-creators-module"></span><h2>dic.frame_creators module<a class="headerlink" href="#module-dic.frame_creators" title="Permalink to this headline">¶</a></h2>
+<p>This submodule holds the frame creators that produce an image sequence that will be converted into a movie.
+A frame creator is an object that when called with the frame number will return the corresponding frame as a
+<code class="docutils literal"><span class="pre">matplotlib.figure.Figure</span></code> object and has a length (i.e. <code class="docutils literal"><span class="pre">__len__</span></code>) equal to the number of frames it intends to create.</p>
+<p>Feel free to add you own frame creator. I will periodically update this to include more as I (or others) need them.</p>
 <dl class="class">
 <dt id="dic.frame_creators.OverlayWithStressStrainFrameCreator">
 <em class="property">class </em><code class="descclassname">dic.frame_creators.</code><code class="descname">OverlayWithStressStrainFrameCreator</code><span class="sig-paren">(</span><em>image_filenames</em>, <em>dic_filenames</em>, <em>variable</em>, <em>xy_data</em>, <em>figure_width=10.0</em>, <em>fractional_padding=0.5</em>, <em>overlay_contour_options=None</em>, <em>xy_axes_options=None</em>, <em>xy_plot_options=None</em>, <em>colorbar_options=None</em>, <em>point_plot_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/frame_creators.html#OverlayWithStressStrainFrameCreator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.frame_creators.OverlayWithStressStrainFrameCreator" title="Permalink to this definition">¶</a></dt>
@@ -817,6 +833,8 @@ will create an extensometer.</p>
 </div>
 <div class="section" id="module-dic.geometry_utils">
 <span id="dic-geometry-utils-module"></span><h2>dic.geometry_utils module<a class="headerlink" href="#module-dic.geometry_utils" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">geometry_utils</span></code> module contain utility functions (not specific to DIC) that aid in applying geometric transformations
+or determining spatial relationships between data point, usually in 3D space.</p>
 <dl class="attribute">
 <dt id="dic.geometry_utils.norm">
 <code class="descclassname">dic.geometry_utils.</code><code class="descname">norm</code><a class="reference internal" href="_modules/dic/geometry_utils.html#norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.geometry_utils.norm" title="Permalink to this definition">¶</a></dt>
@@ -1062,6 +1080,10 @@ scale, translation, and rotation.</p>
 </div>
 <div class="section" id="module-dic.plot">
 <span id="dic-plot-module"></span><h2>dic.plot module<a class="headerlink" href="#module-dic.plot" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">plot</span></code> module contains the functions needed to display DIC overlays using <a class="reference internal" href="#dic.plot.plot_overlay" title="dic.plot.plot_overlay"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_overlay()</span></code></a> and <code class="docutils literal"><span class="pre">(x,y)</span></code> data using
+<a class="reference internal" href="#dic.plot.plot_overlay" title="dic.plot.plot_overlay"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_overlay()</span></code></a>. Because the default colorbars from Matplotlib can be somewhat underwhelming (and produce unintended
+effects when adding them to an existing figure) the <a class="reference internal" href="#dic.plot.plot_colorbar" title="dic.plot.plot_colorbar"><code class="xref py py-func docutils literal"><span class="pre">dic.plot.plot_colorbar()</span></code></a> function allows explicit creation of the desired
+colorbar.</p>
 <dl class="function">
 <dt id="dic.plot.plot_overlay">
 <code class="descclassname">dic.plot.</code><code class="descname">plot_overlay</code><span class="sig-paren">(</span><em>image_filename</em>, <em>dic_data</em>, <em>key</em>, <em>fig=None</em>, <em>ax=None</em>, <em>contour_options=None</em>, <em>add_colorbar=False</em>, <em>colorbar_title=None</em>, <em>colorbar_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/plot.html#plot_overlay"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.plot.plot_overlay" title="Permalink to this definition">¶</a></dt>
@@ -1330,6 +1352,8 @@ tight bbox is calculated.</dd>
 </div>
 <div class="section" id="module-dic.scale">
 <span id="dic-scale-module"></span><h2>dic.scale module<a class="headerlink" href="#module-dic.scale" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.scale" title="dic.scale"><code class="xref py py-mod docutils literal"><span class="pre">dic.scale</span></code></a> module provides functions that will determine the millimeters per pixel (or pixels per millimeter)
+for a given DIC data file.</p>
 <dl class="function">
 <dt id="dic.scale.px_per_mm">
 <code class="descclassname">dic.scale.</code><code class="descname">px_per_mm</code><span class="sig-paren">(</span><em>dic_data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/scale.html#px_per_mm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.scale.px_per_mm" title="Permalink to this definition">¶</a></dt>
@@ -1383,6 +1407,8 @@ The dictionary must contain the keys <code class="docutils literal"><span class=
 </div>
 <div class="section" id="module-dic.smooth">
 <span id="dic-smooth-module"></span><h2>dic.smooth module<a class="headerlink" href="#module-dic.smooth" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.smooth" title="dic.smooth"><code class="xref py py-mod docutils literal"><span class="pre">dic.smooth</span></code></a> module allows a vector of data to be smoothed, often alleviating some of the undesired spikes that
+occurs during data acquisition.</p>
 <dl class="function">
 <dt id="dic.smooth.smooth">
 <code class="descclassname">dic.smooth.</code><code class="descname">smooth</code><span class="sig-paren">(</span><em>x</em>, <em>window_len=10</em>, <em>window='hanning'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/smooth.html#smooth"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.smooth.smooth" title="Permalink to this definition">¶</a></dt>
@@ -1433,6 +1459,9 @@ in the beginning and end of the output signal.</p>
 </div>
 <div class="section" id="module-dic.stress_strain">
 <span id="dic-stress-strain-module"></span><h2>dic.stress_strain module<a class="headerlink" href="#module-dic.stress_strain" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.stress_strain" title="dic.stress_strain"><code class="xref py py-mod docutils literal"><span class="pre">dic.stress_strain</span></code></a> module provides a function that will calculate the stress-strain response from a set
+of DIC files and the corresponding extensometers and test parameters <code class="docutils literal"><span class="pre">force</span></code> as measured from the MTS and sample
+area. The latter two are required to calculate stress, and the extensometers are used to calculate an average strain.</p>
 <dl class="function">
 <dt id="dic.stress_strain.stress_strain">
 <code class="descclassname">dic.stress_strain.</code><code class="descname">stress_strain</code><span class="sig-paren">(</span><em>dic_filenames</em>, <em>force</em>, <em>area</em>, <em>extensometers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/stress_strain.html#stress_strain"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.stress_strain.stress_strain" title="Permalink to this definition">¶</a></dt>
@@ -1474,6 +1503,8 @@ average at each data point is returned.</p>
 </div>
 <div class="section" id="module-dic.strut_metrics">
 <span id="dic-strut-metrics-module"></span><h2>dic.strut_metrics module<a class="headerlink" href="#module-dic.strut_metrics" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.strut_metrics" title="dic.strut_metrics"><code class="xref py py-mod docutils literal"><span class="pre">dic.strut_metrics</span></code></a> implements metrics useful when analyzing lattices or strut-like structures.</p>
+<p>These will be added as needed.</p>
 <dl class="function">
 <dt id="dic.strut_metrics.nodal_rotation">
 <code class="descclassname">dic.strut_metrics.</code><code class="descname">nodal_rotation</code><span class="sig-paren">(</span><em>dic_filenames</em>, <em>extensometers</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/strut_metrics.html#nodal_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.strut_metrics.nodal_rotation" title="Permalink to this definition">¶</a></dt>
@@ -1505,6 +1536,8 @@ average at each data point is returned.</p>
 </div>
 <div class="section" id="module-dic.variables">
 <span id="dic-variables-module"></span><h2>dic.variables module<a class="headerlink" href="#module-dic.variables" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.variables" title="dic.variables"><code class="xref py py-mod docutils literal"><span class="pre">dic.variables</span></code></a> module provides custom variables that can be added to DIC data as a <code class="docutils literal"><span class="pre">{key:</span> <span class="pre">value}</span></code> pair
+to an existing dictionary.</p>
 <dl class="function">
 <dt id="dic.variables.add_transverse_displacement">
 <code class="descclassname">dic.variables.</code><code class="descname">add_transverse_displacement</code><span class="sig-paren">(</span><em>dic_data</em>, <em>nodes</em>, <em>elems</em>, <em>strut_radius</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/variables.html#add_transverse_displacement"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.variables.add_transverse_displacement" title="Permalink to this definition">¶</a></dt>
@@ -1548,6 +1581,8 @@ is updated in-place.</p>
 </div>
 <div class="section" id="module-dic.video">
 <span id="dic-video-module"></span><h2>dic.video module<a class="headerlink" href="#module-dic.video" title="Permalink to this headline">¶</a></h2>
+<p>The <a class="reference internal" href="#module-dic.video" title="dic.video"><code class="xref py py-mod docutils literal"><span class="pre">dic.video</span></code></a> module provides functions to export video frames and convert an image sequence to a video.
+The latter assumes the FFMPEG is installed and available on your path.</p>
 <dl class="function">
 <dt id="dic.video.export_frames">
 <code class="descclassname">dic.video.</code><code class="descname">export_frames</code><span class="sig-paren">(</span><em>frame_creator</em>, <em>output_directory=None</em>, <em>output_filename='frame.png'</em>, <em>savefig_options=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/dic/video.html#export_frames"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#dic.video.export_frames" title="Permalink to this definition">¶</a></dt>

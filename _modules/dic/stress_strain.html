@@ -127,7 +127,14 @@
            <div itemprop="articleBody">
             
   <h1>Source code for dic.stress_strain</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The :mod:`dic.stress_strain` module provides a function that will calculate the stress-strain response from a set</span>
+<span class="sd">of DIC files and the corresponding extensometers and test parameters ``force`` as measured from the MTS and sample</span>
+<span class="sd">area. The latter two are required to calculate stress, and the extensometers are used to calculate an average strain.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">.extensometer</span> <span class="kn">import</span> <span class="n">extensometer_strain</span><span class="p">,</span> <span class="n">extensometer_sequence</span>
 

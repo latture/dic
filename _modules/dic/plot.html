@@ -127,13 +127,19 @@
            <div itemprop="articleBody">
             
   <h1>Source code for dic.plot</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The ``plot`` module contains the functions needed to display DIC overlays using :func:`dic.plot.plot_overlay` and ``(x,y)`` data using</span>
+<span class="sd">:func:`dic.plot.plot_overlay`. Because the default colorbars from Matplotlib can be somewhat underwhelming (and produce unintended</span>
+<span class="sd">effects when adding them to an existing figure) the :func:`dic.plot.plot_colorbar` function allows explicit creation of the desired</span>
+<span class="sd">colorbar.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="kn">as</span> <span class="nn">mpl</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">show</span><span class="p">,</span> <span class="n">savefig</span>
 <span class="kn">import</span> <span class="nn">matplotlib.image</span> <span class="kn">as</span> <span class="nn">mpimg</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">.dic_io</span> <span class="kn">import</span> <span class="n">load_dic_data</span>
 <span class="kn">from</span> <span class="nn">.scale</span> <span class="kn">import</span> <span class="n">px_per_mm</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;plot_overlay&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_xy&quot;</span><span class="p">,</span> <span class="s2">&quot;plot_colorbar&quot;</span><span class="p">,</span> <span class="s2">&quot;show&quot;</span><span class="p">,</span> <span class="s2">&quot;savefig&quot;</span><span class="p">]</span>

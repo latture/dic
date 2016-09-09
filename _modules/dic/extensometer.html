@@ -127,7 +127,18 @@
            <div itemprop="articleBody">
             
   <h1>Source code for dic.extensometer</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">The ``extensometer`` module provides a means of easily creating and analyzing extensometers. An extensometer is</span>
+<span class="sd">defined by two nodal locations connected by a straight line. Metrics can be extracted from extensometers such as</span>
+<span class="sd">the length, angle, strain, etc. If the same metric needs to be extracted from the same extensometer for several</span>
+<span class="sd">DIC files, then the ``extensometer_sequence`` allows a set of DIC filenames, extensometers and metric to be provided,</span>
+<span class="sd">and the relevant metric will be extracted for the given extensometers for all the DIC files. Placing extensometers</span>
+<span class="sd">can be accomplished by using the ``place_extensometers`` function which, when given the reference image and DIC filenames,</span>
+<span class="sd">allows extensometer placement by clicking on a Matplotlib figure.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">namedtuple</span><span class="p">,</span> <span class="n">Iterable</span>
 <span class="kn">import</span> <span class="nn">itertools</span>
 <span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">sqrt</span>

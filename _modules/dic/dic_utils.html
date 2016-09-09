@@ -127,7 +127,12 @@
            <div itemprop="articleBody">
             
   <h1>Source code for dic.dic_utils</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">``dic_utils`` contains several utility functions used when analyzing DIC data, e.g. determining the step size,</span>
+<span class="sd">going from pixel to millimeter coordinates, and determining deformations.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;get_step&quot;</span><span class="p">,</span> <span class="s2">&quot;point_to_indices&quot;</span><span class="p">,</span> <span class="s2">&quot;get_initial_position&quot;</span><span class="p">,</span> <span class="s2">&quot;get_displacement&quot;</span><span class="p">,</span> <span class="s2">&quot;point_to_position&quot;</span><span class="p">]</span>
 
