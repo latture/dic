@@ -44,8 +44,7 @@ def get_filenames(directory, extension, prepend_directory=False):
     output.sort()
 
     if prepend_directory:
-        for i, f in enumerate(output):
-            output[i] = os.path.join(directory, f)
+        output = [os.path.join(directory, f) for f in output]
 
     return output
 
