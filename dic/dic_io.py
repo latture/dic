@@ -18,9 +18,9 @@ import warnings
 __all__ = ["load_dic_data", "load_csv_data", "get_filenames", "get_image_filenames", "update_dic_data"]
 
 
-def get_filenames(directory, extension, prepend_directory=False):
+def get_filenames(directory, extension, sort=True, prepend_directory=False):
     """
-    Retrieves a sorted list of file names in the specified directory with the given extension.
+    Retrieves a list of file names in the specified directory with the given extension.
 
     Parameters
     ----------
@@ -28,24 +28,27 @@ def get_filenames(directory, extension, prepend_directory=False):
         Directory to search.
     extension : str
         Extension to search for (including the period, if applicable).
+    sort : bool, optional
+        Whether to sort the files. Default = ``True``.
     prepend_directory : bool, optional
         Whether to prepend the directory to the filenames. Default = ``False``.
 
     Returns
     -------
     List[str]
-        Sorted list of file names that match the given extension
+        List of file names that match the given extension
     """
     output = []
     for f in os.listdir(directory):
         fbase, fext = os.path.splitext(f)
         if fext == extension:
             output.append(f)
-    output.sort()
+            
+    if sort:
+        output.sort()
 
     if prepend_directory:
-        for i, f in enumerate(output):
-            output[i] = os.path.join(directory, f)
+        output = [os.path.join(directory, f) for f in output]
 
     return output
 
