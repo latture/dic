@@ -122,7 +122,7 @@ def _scale_to_ffmpeg_arg(scale):
     return "\"scale={:s}:{:s}\"".format(width, height)
 
 
-def image_sequence_to_video(input_template, output_filename, crf=23, scale=None):
+def image_sequence_to_video(input_template, output_filename, crf=23, scale=None, fps=24):
     """
     Converts an image sequence into a video using FFMPEG.
 
@@ -146,11 +146,15 @@ def image_sequence_to_video(input_template, output_filename, crf=23, scale=None)
         twice the bitrate. General usage is to choose the highest CRF value that still provides an acceptable quality.
         If the output looks good, then try a higher value and if it looks bad then choose a lower value.
         (credit: https://trac.ffmpeg.org/wiki/Encode/H.264)
+    fps : float, optional
+        Number of frames per second in the output video. The default is 24.
     """
     scale_arg = _scale_to_ffmpeg_arg(scale)
 
     args = ["ffmpeg",
+            "-r", fps,
             "-i", input_template,
+            "-r", fps,
             "-crf", "{:d}".format(crf),
             "-c:v", "libx264",
             "-pix_fmt", "yuv420p",
