@@ -151,10 +151,11 @@ def image_sequence_to_video(input_template, output_filename, crf=23, scale=None,
     """
     scale_arg = _scale_to_ffmpeg_arg(scale)
 
+    fps_arg = str(fps)
     args = ["ffmpeg",
-            "-r", fps,
+            "-r", fps_arg,
             "-i", input_template,
-            "-r", fps,
+            "-r", fps_arg,
             "-crf", "{:d}".format(crf),
             "-c:v", "libx264",
             "-pix_fmt", "yuv420p",
