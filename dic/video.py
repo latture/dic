@@ -149,20 +149,24 @@ def image_sequence_to_video(input_template, output_filename, crf=23, scale=None,
     fps : float, optional
         Number of frames per second in the output video. The default is 24.
     """
-    scale_arg = _scale_to_ffmpeg_arg(scale)
-
     fps_arg = str(fps)
+    crf_arg = "{:d}".format(crf)
+    input_arg = "\"{:s}\"".format(input_template)
+    scale_arg = _scale_to_ffmpeg_arg(scale)
+    output_arg = "\"{:s}\"".format(output_filename)
+
     args = ["ffmpeg",
             "-r", fps_arg,
-            "-i", input_template,
+            "-i", input_arg,
             "-r", fps_arg,
-            "-crf", "{:d}".format(crf),
+            "-crf", crf_arg,
             "-c:v", "libx264",
             "-pix_fmt", "yuv420p",
             "-vf", scale_arg,
             "-y",
-            output_filename]
+            output_arg]
     cmd = " ".join(args)
+    print(cmd)
     print("Converting images into video...")
     p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1)
     with p.stdout:
