@@ -43,6 +43,29 @@ class Extensometer(namedtuple("Extensometer", ["pt1", "pt2"])):
     """
 
 
+def extensometer_to_position(dic_data, extensometer, add_displacement=True):
+    """
+    Converts an extensometer from pixel to coordinate space, optionally adding the displacement of the end points.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary containing the DIC data.
+    extensometer : :class:`dic.extensometer.Extensometer`
+        ``(x, y)`` coordinates of the extensometer points in pixel space.
+    add_displacement : bool, optional
+        Whether to add displacement to the undeformed position. Default is ``True``.
+
+    Returns
+    -------
+    (x1, y1, z1), (x2, y2, z2) : ``numpy.ndarray``, ``np.ndarray``
+        Two arrays of three values. Each specifies the ``(x, y, z)`` location (in mm) of the extensometer end point.
+    """
+    pt1_pos = point_to_position(dic_data, pt1, add_displacement=add_displacement)
+    pt2_pos = point_to_position(dic_data, pt2, add_displacement=add_displacement)
+    return pt1_pos, pt2_pos
+
+
 def extensometer_length(dic_data, extensometer, add_displacement=True):
     """
     Calculates the linear distance between the two endpoints of the extensometer.
@@ -61,10 +84,53 @@ def extensometer_length(dic_data, extensometer, add_displacement=True):
     float
         Length of the extensometer.
     """
-    pt1_pos = point_to_position(dic_data, extensometer.pt1, add_displacement)
-    pt2_pos = point_to_position(dic_data, extensometer.pt2, add_displacement)
+    pt1_pos, pt2_pos = extensometer_to_position(dic_data, extensometer, add_displacement=add_displacement)
     delta_pos = pt2_pos - pt1_pos
     return norm(delta_pos)
+
+
+def _interpolate_point(extensometer, t):
+    """
+    Linearly interpolates between the two endpoints of the extensometer.
+
+    Parameters
+    ----------
+    extensometer : :class:`dic.extensometer.Extensometer`
+        ``(x, y)`` coordinates of the extensometer points in pixel space.
+    t : float, [0., 1.]
+        At ``0.`` the first point in the extensometer is returned.
+        At ``1.`` the second point is returned. In between the pixel coordinates
+        are linearly interpolated between the endpoints.
+
+    Returns
+    -------
+    (x, y) : (float, float)
+        Position (in pixels) of the interpolated point.
+    """
+    pt1, pt2 = extensometer
+    pt1 = np.asarray(pt1)
+    pt2 = np.asarray(pt2)
+    return pt1 + (pt2 - pt1) * t
+
+
+def _convert_fractional_points_to_array(fractional_points):
+    """
+    Converts fractional points input parameter to a Numpy ``ndarray``.
+
+    Parameters
+    ----------
+    fractional_points : int or List[int]
+        If ``int``, uniformly spaced intervals on the interval ``[0, 1]`` with the number of sample points
+        determined by ``fractional_points``. If ``List[float]``, the given items in the list will be returned as an ``ndarray``.
+
+    Returns
+    -------
+    ``numpy.ndarray``
+        List of fractional points on the range ``[0, 1]``
+    """
+    if isinstance(fractional_points, Iterable):
+        return np.asarray(fractional_points)
+    return np.linspace(0, 1, fractional_points)
 
 
 def extensometer_transverse_displacement(dic_data, extensometer, fractional_points=10):
@@ -91,23 +157,13 @@ def extensometer_transverse_displacement(dic_data, extensometer, fractional_poin
     List[float]
         List of transverse displacements.
     """
-    pt1 = np.asarray(extensometer.pt1)
-    pt2 = np.asarray(extensometer.pt2)
-    pt1_pos = point_to_position(dic_data, pt1)
-    pt2_pos = point_to_position(dic_data, pt2)
-
-    if isinstance(fractional_points, Iterable):
-        fractional_points = np.asarray(fractional_points)
-    else:
-        fractional_points= np.linspace(0, 1, fractional_points)
-
+    pt1_pos, pt2_pos = extensometer_to_position(dic_data, extensometer)
+    fractional_points = _convert_fractional_points_to_array(fractional_points)
     transverse_displacement = np.empty(len(fractional_points))
-
     for i, t in enumerate(fractional_points):
-        mid_pt = pt1 + (pt2 - pt1) * t
+        mid_pt = _interpolate_point(extensometer, t)
         mid_pos = point_to_position(dic_data, mid_pt)
         transverse_displacement[i] = distance_to(mid_pos, pt1_pos, pt2_pos)
-
     return transverse_displacement
 
 
@@ -148,7 +204,7 @@ def extensometer_strain(dic_data, extensometer):
     return deformed_length / initial_length - 1.0
 
 
-def extensometer_angle(dic_data, extensometer):
+def extensometer_angle(dic_data, extensometer, add_displacement=True):
     """
     Calculates the angle (in radians) between the specified extensometer and the x-axis.
 
@@ -164,14 +220,10 @@ def extensometer_angle(dic_data, extensometer):
     float
         Angle in radians.
     """
-    pt1, pt2 = extensometer
-    pos1 = point_to_position(dic_data, pt1)
-    pos2 = point_to_position(dic_data, pt2)
-    delta_pos = pos2 - pos1
-    deformed_length = sqrt(delta_pos.dot(delta_pos))
-
+    pt1_pos, pt2_pos = extensometer_to_position(dic_data, extensometer, add_displacement=add_displacement)
+    delta_pos = pt2_pos - pt1_pos
+    deformed_length = norm(delta_pos)
     x_axis = np.array([1.0, 0.0, 0.0])
-
     c = np.dot(delta_pos, x_axis) / deformed_length
     return np.arccos(np.clip(c, -1.0, 1.0))
 
