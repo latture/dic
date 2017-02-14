@@ -19,15 +19,17 @@ import numpy as np
 import scipy.optimize as so
 import sys
 from tqdm import tqdm
+import warnings
 from .dic_io import load_dic_data
 from .dic_utils import point_to_position, point_to_indices, get_displacement, get_initial_position
 from .geometry_utils import norm, distance_to
 from .plot import plot_overlay
 from .smooth import smooth
 
-__all__ = ["Extensometer", "extensometer_length", "extensometer_transverse_displacement",
-           "extensometer_strain", "extensometer_angle", "extensometer_curvature",
-           "extensometer_sequence", "place_extensometers"]
+__all__ = ["Extensometer", "extensometer_to_position", "extensometer_length",
+           "extensometer_rectified_length", "extensometer_transverse_displacement",
+           "extensometer_strain", "extensometer_neutral_axis_strain", "extensometer_angle",
+           "extensometer_curvature", "extensometer_sequence", "place_extensometers"]
 
 
 class Extensometer(namedtuple("Extensometer", ["pt1", "pt2"])):
@@ -133,6 +135,67 @@ def _convert_fractional_points_to_array(fractional_points):
     return np.linspace(0, 1, fractional_points)
 
 
+def extensometer_rectified_length(dic_data, extensometer, fractional_points=50, window_len=10, add_displacement=True):
+    """
+    Approximates the length of an extensometer by connecting a finite amount of points along the extensometer
+    and summing the length of each line segment. If the path between the extensometer end points is a straight line,
+    this function and :func:`dic.extensometer.extensometer_length` will yield the same results.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary containing the DIC data.
+    extensometer : :class:`dic.extensometer.Extensometer`
+        ``(x, y)`` coordinates of the extensometer points in pixel space.
+    fractional_points : int or List[int]
+        If ``int``, uniformly spaced intervals on the interval ``[0, 1]`` with the number of sample points
+        determined by ``fractional_points``. If ``List[float]``, the given items in the list will be returned
+        as an ``ndarray``. Adjacent fractional points will be joined to form the line segments that will
+        be used to determine the length of the extensometer.
+    window_len : int, optional
+        The dimension of the smoothing window. Default is ``10``.
+    add_displacement : bool, optional
+        Whether to add displacement to the undeformed position. Default is ``True``.
+
+    Returns
+    -------
+    float
+        Length of the extensometer.
+    """
+    # get the interpolated position of the extensometer in 3D:
+    fractional_points = _convert_fractional_points_to_array(fractional_points)
+    extensometer_pos = np.empty((len(fractional_points), 3))
+    for i, t in enumerate(fractional_points):
+        pt = _interpolate_point(extensometer, t)
+        extensometer_pos[i] = point_to_position(dic_data, pt, add_displacement=add_displacement)
+
+    # remove any uncorrelated points:
+    # if an interpolated point is uncorrelated then all (x, y, z)
+    # values will be nan, so we only need to check isnan on
+    # one column (in the case I take the first column.).
+    is_valid = np.logical_not(np.isnan(extensometer_pos[:, 0]))
+    valid_pos = extensometer_pos[is_valid]
+    num_valid_points = len(valid_pos)
+
+    if num_valid_points < window_len:
+        new_window_len = num_valid_points - 1
+        what = "The number of valid points along the extensometer ({0:d}) is less than the window_len ({1:d}). " \
+               "The window_len for the current extensometer has been shortened to {0:d}.".format(num_valid_points, window_len, new_window_len)
+        warnings.warn(what)
+        window_len = new_window_len
+
+    # smooth the data along each axis
+    smoothed_pos = np.empty_like(valid_pos)
+    for i in range(valid_pos.shape[-1]):
+        smoothed_pos[:, i] = smooth(valid_pos[:, i], window_len=window_len)
+
+    # find total length by summing the lengths of each individual segment
+    pt1 = smoothed_pos[:-1]
+    pt2 = smoothed_pos[1:]
+    segment_lengths = np.linalg.norm(pt2 - pt1, axis=1)
+    return np.sum(segment_lengths)
+
+
 def extensometer_transverse_displacement(dic_data, extensometer, fractional_points=10):
     """
     Calculates the displacement transverse to the deformed end-points of the extensometer.
@@ -199,8 +262,45 @@ def extensometer_strain(dic_data, extensometer):
     pos2 += disp2
     delta_pos = pos2 - pos1
 
-    deformed_length = sqrt(delta_pos.dot(delta_pos))
+    deformed_length = norm(delta_pos)
 
+    return deformed_length / initial_length - 1.0
+
+
+def extensometer_neutral_axis_strain(dic_data, extensometer, fractional_points=50, window_len=10):
+    """
+    Calculates the strain of the neutral axis of the extensometer by comparing the rectified extensometer
+    length with and without displacements applied. If the extensometer is approximately straight,
+    this function will yield nearly the same value as :func:`dic.extensometer.extensometer_strain`
+    which only considers nodal end points of the extensometer.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary containing the DIC data.
+    extensometer : :class:`dic.extensometer.Extensometer`
+        ``(x, y)`` coordinates of the extensometer points in pixel space.
+    fractional_points : int or List[int]
+        If ``int``, uniformly spaced intervals on the interval ``[0, 1]`` with the number of sample points
+        determined by ``fractional_points``. If ``List[float]``, the given items in the list will be returned
+        as an ``ndarray``. Adjacent fractional points will be joined to form the line segments that will
+        be used to determine the length of the extensometer.
+    window_len : int, optional
+        The dimension of the smoothing window. Default is ``10``.
+
+    Returns
+    -------
+    float
+        Strain of the neutral axis
+    """
+    initial_length = extensometer_rectified_length(dic_data, extensometer,
+                                                   fractional_points=fractional_points,
+                                                   add_displacement=False,
+                                                   window_len=window_len)
+    deformed_length = extensometer_rectified_length(dic_data, extensometer,
+                                                    fractional_points=fractional_points,
+                                                    add_displacement=True,
+                                                    window_len=window_len)
     return deformed_length / initial_length - 1.0
 
 
