@@ -45,13 +45,13 @@ class Extensometer(namedtuple("Extensometer", ["pt1", "pt2"])):
 
 def extensometer_length(dic_data, extensometer, add_displacement=True):
     """
-    Calculates the length of the extensometer.
+    Calculates the linear distance between the two endpoints of the extensometer.
 
     Parameters
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    extensometer : :class:.`Extensometer`
+    extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
     add_displacement : bool, optional
         Whether to add displacement to the undeformed position. Default is ``True``.
@@ -75,7 +75,7 @@ def extensometer_transverse_displacement(dic_data, extensometer, fractional_poin
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    extensometer : :class:.`Extensometer`
+    extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
     fractional_points : int or List[float], optional
         If ``int``, the transverse displacement will be calculated in uniformly spaced intervals
@@ -119,7 +119,7 @@ def extensometer_strain(dic_data, extensometer):
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    extensometer : :class:.`Extensometer`
+    extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
 
     Returns
@@ -156,7 +156,7 @@ def extensometer_angle(dic_data, extensometer):
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    extensometer : :class:.`Extensometer`
+    extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
 
     Returns
@@ -262,7 +262,7 @@ def extensometer_curvature(dic_data, extensometer):
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    extensometer : :class:.`Extensometer`
+    extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
 
     Returns
@@ -306,7 +306,7 @@ def extensometer_sequence(dic_filenames, extensometers, metric, description="Pro
     ----------
     dic_filenames : str
         Names of DIC files to analyze.
-    extensometers : List[:class:`.Extensometer`]
+    extensometers : List[:class:`dic.extensometer.Extensometer`]
         List of extensometers to
     metric : callable
         A callable object that provides the signature ``metric(dict, Extensometer) -> float``, i.e. takes as input
@@ -346,7 +346,7 @@ def _extensometer_sequence_worker(args):
 
     Parameters
     ----------
-    args : (str, List[:class:`.Extensometer`], callable)
+    args : (str, List[:class:`dic.extensometer.Extensometer`], callable)
         Tuple of arguments needed for each calculation, i.e. ``(dic_filename, extensometers, metric)``.
 
     returns
