@@ -63,6 +63,7 @@ def extensometer_to_position(dic_data, extensometer, add_displacement=True):
     (x1, y1, z1), (x2, y2, z2) : ``numpy.ndarray``, ``np.ndarray``
         Two arrays of three values. Each specifies the ``(x, y, z)`` location (in mm) of the extensometer end point.
     """
+    pt1, pt2 = extensometer
     pt1_pos = point_to_position(dic_data, pt1, add_displacement=add_displacement)
     pt2_pos = point_to_position(dic_data, pt2, add_displacement=add_displacement)
     return pt1_pos, pt2_pos
