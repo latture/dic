@@ -43,9 +43,18 @@ def point_to_indices(dic_data, pt):
         The row and column in ``dic_data`` that corresponds to the given pixel point.
     """
     step = get_step(dic_data)
-    col = int(round((pt[0] - dic_data["x"].min()) / step))
-    row = int(round((pt[1] - dic_data["y"].min()) / step))
-    return row, col
+    keys = ("y", "x")
+    indices = [None, None]
+
+    for i, key in enumerate(keys):
+        min_key = '{}_min'.format(key)
+        if min_key in dic_data:
+            px_min = dic_data[min_key]
+        else:
+            px_min = dic_data[key].min()
+        px = pt[(i + 1) % 2]
+        indices[i] = int(round((px - px_min) / step))
+    return indices
 
 
 def get_initial_position(dic_data, row, col):
