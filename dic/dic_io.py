@@ -137,6 +137,24 @@ def _unmask_bad_data(dic_data):
             dic_data[key] = np.ma.filled(value)
 
 
+def _store_min_pixel_values(dic_data):
+    """
+    Stores the minimum ``x`` and ``y`` pixel values in the ``x_min`` ``y_min`` keys, respectively.
+    These values are used every time a point is mapped from pixel to space to the corresponding row and column indices
+    in the DIC data. Caching the values significantly reduces the conversion time. To ensure that the minimum values
+    are valid, the ``x`` and ``y`` arrays are set to read-only when this function is called.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary of ``{key: value}`` pairs.
+    """
+    for key in ["x", "y"]:
+        min_val = dic_data[key].min()
+        dic_data["{:s}_min".format(key)] = min_val
+        dic_data[key].setflags(write=False)
+
+
 def load_dic_data(filename, variable_names=None):
     """
     Loads the DIC data specified by the given filename. Uncorrelated regions of the dataset are masked (i.e. removed)
@@ -160,6 +178,7 @@ def load_dic_data(filename, variable_names=None):
     """
     dic_data = spio.loadmat(filename, variable_names=variable_names)
     _mask_bad_data(dic_data)
+    _store_min_pixel_values(dic_data)
     return dic_data
 
 
