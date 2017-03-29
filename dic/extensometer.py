@@ -16,7 +16,7 @@ from math import sqrt
 import matplotlib.pyplot as plt
 import multiprocessing as mp
 import numpy as np
-import scipy.optimize as so
+from scipy.interpolate import UnivariateSpline
 import sys
 from tqdm import tqdm
 import warnings
@@ -136,11 +136,73 @@ def _convert_fractional_points_to_array(fractional_points):
     return np.linspace(0, 1, fractional_points)
 
 
+def _extensometer_interpolated_points(dic_data, extensometer, fractional_points=50, window_len=10, add_displacement=True):
+    """
+    Interpolates and smoothes the 3D points between extensometer endpoints. Uncorrelated intermediary points are removed
+    from the data set. Each row in the returned array contains``[t, x, y, z]`` where ``t`` is the fractional
+    length along the extensometer on the range ``[0, 1]`` and ``x, y, z`` represent the corresponding interpolated point.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary containing the DIC data.
+    extensometer : :class:`dic.extensometer.Extensometer`
+        ``(x, y)`` coordinates of the extensometer points in pixel space.
+    fractional_points : int or List[int], optional
+        If ``int``, uniformly spaced intervals on the interval ``[0, 1]`` with the number of sample points
+        determined by ``fractional_points``. If ``List[float]``, then the given items in the list will be used directly
+        to compute displacement. A value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``corresponds
+        to ``pt2`` of the extensometer. Default is ``50``.
+    window_len : int, optional
+        The dimension of the smoothing window. Default is ``10``.
+    add_displacement : bool, optional
+        Whether to add displacement to the undeformed position. Default is ``True``.
+
+    Returns
+    -------
+    txyz : ``numpy.ndarray``
+        Array of ``[t, x, y, z]`` data points where ``t`` is the fractional length along the extensometer and ``x,y,z``
+        represent the interpolated coordinate.
+    """
+    # get the interpolated position of the extensometer in 3D:
+    fractional_points = _convert_fractional_points_to_array(fractional_points)
+    extensometer_pos = np.empty((len(fractional_points), 4))
+    extensometer_pos[:, 0] = fractional_points
+    for i, t in enumerate(fractional_points):
+        pt = _interpolate_point(extensometer, t)
+        extensometer_pos[i, 1:] = point_to_position(dic_data, pt, add_displacement=add_displacement)
+
+    # remove any uncorrelated points:
+    # if an interpolated point is uncorrelated then all (x, y, z)
+    # values will be nan, so we only need to check isnan on
+    # one column (in the case I take the x-direction).
+    is_valid = np.logical_not(np.isnan(extensometer_pos[:, 1]))
+    valid_pos = extensometer_pos[is_valid]
+    num_valid_points = len(valid_pos)
+
+    if num_valid_points < window_len:
+        new_window_len = num_valid_points - 1
+        what = "The number of valid points along the extensometer ({0:d}) is less than the window_len ({1:d}). " \
+               "The window_len for the current extensometer has been shortened to {0:d}.".format(num_valid_points,
+                                                                                                 window_len,
+                                                                                                 new_window_len)
+        warnings.warn(what)
+        window_len = new_window_len
+
+    # smooth the data along each axis
+    smoothed_pos = np.empty_like(valid_pos)
+    smoothed_pos[:, 0] = valid_pos[:, 0]
+    for i in range(1, valid_pos.shape[-1]):
+        smoothed_pos[:, i] = smooth(valid_pos[:, i], window_len=window_len)
+
+    return smoothed_pos
+
+
 def extensometer_rectified_length(dic_data, extensometer, fractional_points=50, window_len=10, add_displacement=True):
     """
     Approximates the length of an extensometer by connecting a finite amount of points along the extensometer
-    and summing the length of each line segment. If the path between the extensometer end points is a straight line,
-    this function and :func:`dic.extensometer.extensometer_length` will yield the same results.
+    and summing the length of each line segment. If the path between the extensometer end points is a straight line
+    or ``fractional_points = 2``, this function and :func:`dic.extensometer.extensometer_length` will yield the same results.
 
     Parameters
     ----------
@@ -163,36 +225,14 @@ def extensometer_rectified_length(dic_data, extensometer, fractional_points=50, 
     float
         Length of the extensometer.
     """
-    # get the interpolated position of the extensometer in 3D:
-    fractional_points = _convert_fractional_points_to_array(fractional_points)
-    extensometer_pos = np.empty((len(fractional_points), 3))
-    for i, t in enumerate(fractional_points):
-        pt = _interpolate_point(extensometer, t)
-        extensometer_pos[i] = point_to_position(dic_data, pt, add_displacement=add_displacement)
-
-    # remove any uncorrelated points:
-    # if an interpolated point is uncorrelated then all (x, y, z)
-    # values will be nan, so we only need to check isnan on
-    # one column (in the case I take the first column.).
-    is_valid = np.logical_not(np.isnan(extensometer_pos[:, 0]))
-    valid_pos = extensometer_pos[is_valid]
-    num_valid_points = len(valid_pos)
-
-    if num_valid_points < window_len:
-        new_window_len = num_valid_points - 1
-        what = "The number of valid points along the extensometer ({0:d}) is less than the window_len ({1:d}). " \
-               "The window_len for the current extensometer has been shortened to {0:d}.".format(num_valid_points, window_len, new_window_len)
-        warnings.warn(what)
-        window_len = new_window_len
-
-    # smooth the data along each axis
-    smoothed_pos = np.empty_like(valid_pos)
-    for i in range(valid_pos.shape[-1]):
-        smoothed_pos[:, i] = smooth(valid_pos[:, i], window_len=window_len)
+    smoothed_pos = _extensometer_interpolated_points(dic_data, extensometer,
+                                                     fractional_points=fractional_points,
+                                                     window_len=window_len,
+                                                     add_displacement=add_displacement)
 
     # find total length by summing the lengths of each individual segment
-    pt1 = smoothed_pos[:-1]
-    pt2 = smoothed_pos[1:]
+    pt1 = smoothed_pos[:-1, 1:]
+    pt2 = smoothed_pos[1:, 1:]
     segment_lengths = np.linalg.norm(pt2 - pt1, axis=1)
     return np.sum(segment_lengths)
 
@@ -211,10 +251,9 @@ def extensometer_transverse_displacement(dic_data, extensometer, fractional_poin
         If ``int``, the transverse displacement will be calculated in uniformly spaced intervals
         on the interval ``[0, 1]`` with the number of sample points determined by ``fractional_points``.
         If ``List[float]``, then the given items in the list will be used directly to compute displacement.
-        If a ``List`` is given, a value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``
-        corresponds to ``pt2`` of the extensometer, i.e. the fractional coordinates are the fraction
-        along the extensometer's length at which the transverse displacement should be calculated.
-        Default is ``10``.
+        A value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``corresponds to ``pt2`` of the extensometer,
+        i.e. the fractional coordinates are the fraction along the extensometer's length at which the transverse
+        displacement should be calculated. Default is ``10``.
 
     Returns
     -------
@@ -282,10 +321,11 @@ def extensometer_neutral_axis_strain(dic_data, extensometer, fractional_points=5
     extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
     fractional_points : int or List[int]
-        If ``int``, uniformly spaced intervals on the interval ``[0, 1]`` with the number of sample points
-        determined by ``fractional_points``. If ``List[float]``, the given items in the list will be returned
-        as an ``ndarray``. Adjacent fractional points will be joined to form the line segments that will
-        be used to determine the length of the extensometer.
+        If ``int``, the transverse displacement will be calculated in uniformly spaced intervals
+        on the interval ``[0, 1]`` with the number of sample points determined by ``fractional_points``.
+        If ``List[float]``, the given items in the list will be used directly to compute strain.
+        A value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``corresponds to ``pt2`` of the extensometer.
+        Default is ``50``.
     window_len : int, optional
         The dimension of the smoothing window. Default is ``10``.
 
@@ -329,87 +369,9 @@ def extensometer_angle(dic_data, extensometer, add_displacement=True):
     return np.arccos(np.clip(c, -1.0, 1.0))
 
 
-def _distance_from_center(center, x, y):
+def extensometer_curvature(dic_data, extensometer, fractional_points=50, window_len=10):
     """
-    Calculates the distance of each 2D point from the ``center = (x_center, y_center)``
-
-    Parameters
-    ----------
-    center: (T, T)
-        Two-dimensional data point ``(x, y)`` corresponding to the center of the circle.
-    x : T, List[T]
-        Point or list of ``x`` data points to calculate the distance to.
-    y : T, List[T]
-        Point or list of ``y`` data points to calculate the distance to.
-
-    Returns
-    -------
-    List[float]
-        List of distances from the center point.
-    """
-    x_center, y_center = center
-    return np.sqrt((x - x_center)**2 + (y - y_center)**2)
-
-
-def _leastsq_circle_objective(center, x, y):
-    """
-    Calculates the algebraic distance from the ``(x, y)`` data points
-    and the mean circle centered at ``center = (x_center, y_center)``.
-
-    Parameters
-    ----------
-    center: (T, T)
-        Two-dimensional data point ``(x, y)`` corresponding to the center of the circle.
-    x : T, List[T]
-        Point or list of ``x`` data points to calculate the distance to.
-    y : T, List[T]
-        Point or list of ``y`` data points to calculate the distance to.
-
-    Returns
-    -------
-    List[float]
-        List of distances.
-    """
-    radii = _distance_from_center(center, x, y)
-    return radii - radii.mean()
-
-
-def _fit_leastsq_circle(x, y):
-    """
-    Fits a circle to the given dataset.
-
-    Parameters
-    ----------
-    x : List[T]
-        x data points.
-    y : List[T]
-        y data points
-
-    Returns
-    -------
-    (x_center, y_center, radius, residual) : (float, float, float, float)
-        Parameters and residual of the circular fit.
-    """
-    # coordinates of the barycenter form the initial guess
-    x_mean = np.mean(x)
-    y_mean = np.mean(y)
-    center_estimate = x_mean, y_mean
-
-    center, ier = so.leastsq(_leastsq_circle_objective, center_estimate, args=(x,y))
-    x_center, y_center = center
-    radii = _distance_from_center(center, x, y)
-    mean_radius = radii.mean()
-    residual = np.sum((radii - mean_radius)**2)
-
-    return x_center, y_center, mean_radius, residual
-
-
-def extensometer_curvature(dic_data, extensometer):
-    """
-    Calculates the curvature of the given extensometer. Curvature is calculated
-    by fitting a circle to the data points that are within a distance of
-    +/- ``extensometer_length / 4`` of the point with the maximum
-    transverse displacement.
+    Calculates the curvature along the length of the given extensometer.
 
     Parameters
     ----------
@@ -417,38 +379,40 @@ def extensometer_curvature(dic_data, extensometer):
         Dictionary containing the DIC data.
     extensometer : :class:`dic.extensometer.Extensometer`
         ``(x, y)`` coordinates of the extensometer points in pixel space.
+    fractional_points : int or List[int]
+        If ``int``, the transverse displacement will be calculated in uniformly spaced intervals
+        on the interval ``[0, 1]`` with the number of sample points determined by ``fractional_points``.
+        If ``List[float]``, then the given items in the list will be used directly to compute displacement.
+        A value of ``0`` corresponds to ``pt1`` of the extensometer and ``1``corresponds to ``pt2`` of the extensometer,
+        Default is ``50``.
+    window_len : int, optional
+        The dimension of the smoothing window. Default is ``10``.
 
     Returns
     -------
-    float
-        Curvature.
+    ``numpy.ndarray``
+        Curvature at the specified ``fractional_points``.
     """
-    # sample 50 points along the extensometer
-    num_points = 50
-    fractional_points = np.linspace(0, 1, num_points)
-    length = extensometer_length(dic_data, extensometer, add_displacement=True)
+    t, x, y, z = _extensometer_interpolated_points(dic_data, extensometer,
+                                                   fractional_points=fractional_points,
+                                                   window_len=window_len,
+                                                   add_displacement=True).T
 
-    transverse_displacement = extensometer_transverse_displacement(dic_data, extensometer, fractional_points)
-    masked_transverse_displacement = np.ma.masked_invalid(transverse_displacement, copy=False)
-    masked_transverse_displacement = np.ma.masked_invalid(smooth(masked_transverse_displacement))
-    max_disp_idx = np.argmax(masked_transverse_displacement)
+    fx = UnivariateSpline(t, x)
+    fy = UnivariateSpline(t, y)
+    fz = UnivariateSpline(t, z)
 
-    # number of indices that correspond to a distance of L / 4
-    # where L = extensometer length
-    quarter_idx = num_points // 4
+    dfx_dt = fx.derivative(1)(t)
+    dfy_dt = fy.derivative(1)(t)
+    dfz_dt = fz.derivative(1)(t)
 
-    # get the indices of the points that are +/- L/4 away from the
-    # maximum displacement. Bound indices on the range [0, num_points]
-    right_idx = min(num_points, max_disp_idx + quarter_idx)
-    left_idx = max(0, max_disp_idx - quarter_idx)
+    d2fx_dt2 = fx.derivative(2)(t)
+    d2fy_dt2 = fy.derivative(2)(t)
+    d2fz_dt2 = fz.derivative(2)(t)
 
-    # extract the (x, y) data that will be used for the circular fit
-    x_circular = length * fractional_points[left_idx:right_idx]
-    y_circular = masked_transverse_displacement[left_idx:right_idx]
-
-    x_center, y_center, radius, residual = _fit_leastsq_circle(x_circular, y_circular)
-
-    return 1.0 / radius
+    return np.sqrt((d2fz_dt2 * dfy_dt - d2fy_dt2 * dfz_dt) ** 2 +
+                   (d2fx_dt2 * dfz_dt - d2fz_dt2 * dfx_dt) ** 2 +
+                   (d2fy_dt2 * dfx_dt - d2fx_dt2 * dfy_dt) ** 2) / (dfx_dt ** 2 + dfy_dt ** 2 + dfz_dt ** 2) ** 1.5
 
 
 def extensometer_sequence(dic_filenames, extensometers, metric, description="Processing extensometers"):
