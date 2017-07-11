@@ -16,8 +16,9 @@ from .scale import px_per_mm
 __all__ = ["plot_overlay", "plot_xy", "plot_colorbar", "show", "savefig"]
 
 
-def plot_overlay(image_filename, dic_data, key, fig=None, ax=None, contour_options=None, add_colorbar=False,
-                 colorbar_title=None, colorbar_options=None):
+def plot_overlay(image_filename, dic_data, key, fig=None, ax=None, 
+                 image_options=None, contour_options=None, 
+                 add_colorbar=False, colorbar_title=None, colorbar_options=None):
     """
     Plots a filled contour overlay on top of the specified image.
 
@@ -35,6 +36,10 @@ def plot_overlay(image_filename, dic_data, key, fig=None, ax=None, contour_optio
     ax : ``matplotlib.axes.Axes``, optional
         Axes object to add the overlay to. If not specified the axes will be taken from the given figure's current
         axes. If neither this nor ``fig`` is specified a new axes object will be created.
+    image_options : dict, optional
+        Keyword arguments to use when calling ``matplotlib.pyplot.imshow``. Default is ``None``
+        Valid keys are ``aspect``, ``alpha``, ``cmap``, ``interpolation``, etc.
+        See ``matplotlib.pyplot.imshow`` for all valid keys.
     contour_options : dict, optional
         Keyword arguments to use when calling ``matplotlib.pyplot.contourf``. Default is ``None``
         Valid keys are ``corner_mask``, ``alpha``, ``cmap``, ``levels``, ``extend``, etc.
@@ -70,6 +75,11 @@ def plot_overlay(image_filename, dic_data, key, fig=None, ax=None, contour_optio
     y = dic_data["y"] - dic_data["V"] * scale
     z = dic_data[key]
 
+    if image_options is None:
+        image_options = {}
+    if "cmap" not in image_options:
+        image_options["cmap"] = plt.cm.gray
+
     if contour_options is None:
         contour_options = {}
     if "levels" not in contour_options and z.min() < z.max():
@@ -79,7 +89,7 @@ def plot_overlay(image_filename, dic_data, key, fig=None, ax=None, contour_optio
     if "extend" not in contour_options:
         contour_options["extend"] = "both"
 
-    ax.imshow(image, cmap=plt.cm.gray)
+    ax.imshow(image, **image_options)
     cs = ax.contourf(x, y, z, **contour_options)
     if add_colorbar:
         if colorbar_options is None:
