@@ -4,4 +4,4 @@ docs/build
 .ipynb_checkpoints
 *.pyc
 sample_*
-
+.vscode
