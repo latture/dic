@@ -4,6 +4,7 @@ going from pixel to millimeter coordinates, and determining deformations.
 
 """
 import numpy as np
+import warnings
 
 __all__ = ["get_step", "point_to_indices", "get_initial_position", "get_displacement", "point_to_position"]
 
@@ -34,7 +35,7 @@ def point_to_indices(dic_data, pt):
     ----------
     dic_data : dict
         Dictionary containing the DIC data.
-    pt : (x, x)
+    pt : (x, y)
         Two-dimensional coordinates of the pixel in global space.
 
     Returns
@@ -59,7 +60,7 @@ def point_to_indices(dic_data, pt):
 
 def get_initial_position(dic_data, row, col):
     """
-    Retrieves the initial position (in mm) held at the specified row and column.
+    Retrieves the initial position (in mm if available, otherwise in pixels) held at the specified row and column.
 
     Parameters
     ----------
@@ -73,14 +74,18 @@ def get_initial_position(dic_data, row, col):
     Returns
     -------
     ``numpy.ndarray``
-        Initial ``(x, y, z)`` position in mm.
+        Initial position ``(x, y, z)``.
     """
-    return np.array([dic_data["X"][row, col], dic_data["Y"][row, col], dic_data["Z"][row, col]])
+    try:
+        return np.array([dic_data["X"][row, col], dic_data["Y"][row, col], dic_data["Z"][row, col]])
+    except KeyError:
+        warnings.warn("Position data in millimeters not provided. Falling back to position in pixels.")
+        return np.array([dic_data["x"][row, col], dic_data["y"][row, col], dic_data["z"][row, col]])
 
 
 def get_displacement(dic_data, row, col):
     """
-    Retrieves the displacement (in mm) held at the specified row and column.
+    Retrieves the displacement (in mm if available, otherwise in pixels) held at the specified row and column.
 
     Parameters
     ----------
@@ -94,14 +99,18 @@ def get_displacement(dic_data, row, col):
     Returns
     -------
     ``numpy.ndarray``
-        Displacements ``(u, v, w)`` in mm.
+        Displacements ``(u, v, w)``.
     """
-    return np.array([dic_data["U"][row, col], dic_data["V"][row, col], dic_data["W"][row, col]])
+    try:
+        return np.array([dic_data["U"][row, col], dic_data["V"][row, col], dic_data["W"][row, col]])
+    except KeyError:
+        warnings.warn("Displacement data in millimeters not provided. Falling back to displacement in pixels.")
+        return np.array([dic_data["u"][row, col], dic_data["v"][row, col], dic_data["w"][row, col]])
 
 
 def point_to_position(dic_data, pt, add_displacement=True):
     """
-    Transforms a point in pixel space into its displaced coordinates in mm.
+    Transforms a point in pixel space into its displaced coordinates (in mm if available, otherwise in pixels).
 
     Parameters
     ----------
@@ -115,7 +124,7 @@ def point_to_position(dic_data, pt, add_displacement=True):
     Returns
     -------
     ``numpy.ndarray``
-        ``(x, y, z)`` position in mm of the point.
+        ``(x, y, z)`` position of the point.
     """
     row, col = point_to_indices(dic_data, pt)
     pos = get_initial_position(dic_data, row, col)

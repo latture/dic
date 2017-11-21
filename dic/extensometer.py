@@ -61,7 +61,7 @@ def extensometer_to_position(dic_data, extensometer, add_displacement=True):
     Returns
     -------
     (x1, y1, z1), (x2, y2, z2) : ``numpy.ndarray``, ``np.ndarray``
-        Two arrays of three values. Each specifies the ``(x, y, z)`` location (in mm) of the extensometer end point.
+        Two arrays of three values. Each specifies the ``(x, y, z)`` location (in mm if available, otherwise in pixels) of the extensometer end point.
     """
     pt1, pt2 = extensometer
     pt1_pos = point_to_position(dic_data, pt1, add_displacement=add_displacement)
@@ -472,7 +472,7 @@ def _extensometer_sequence_worker(args):
         The provided metric calculated for each extensometer.
     """
     dic_filename, extensometers, metric = args
-    dic_data = load_dic_data(dic_filename, variable_names=("x", "y", "X", "Y", "Z", "U", "V", "W", "sigma"))
+    dic_data = load_dic_data(dic_filename, variable_names=("x", "y", "u", "v", "X", "Y", "Z", "U", "V", "W", "sigma"))
     output = []
     for extensometer in extensometers:
         output.append(metric(dic_data, extensometer))
