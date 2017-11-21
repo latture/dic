@@ -150,9 +150,36 @@ def _store_min_pixel_values(dic_data):
         Dictionary of ``{key: value}`` pairs.
     """
     for key in ["x", "y"]:
-        min_val = dic_data[key].min()
-        dic_data["{:s}_min".format(key)] = min_val
-        dic_data[key].setflags(write=False)
+        try:
+            min_val = dic_data[key].min()
+            dic_data["{:s}_min".format(key)] = min_val
+            dic_data[key].setflags(write=False)
+        except KeyError:
+            pass
+
+
+def _make_3D(dic_data):
+    """
+    Converts 2D DIC data to 3D by adding position data for ``z`` and displacement data for ``w`` 
+    if either are not already present. If missing, the values for each key are set to zero. 
+    If data is provided in millimeters (i.e. ``X``, ``Y``, ``U``, ``V`` keys are present) ``Z``
+    and ``W`` are also added.
+
+    Parameters
+    ----------
+    dic_data : dict
+        Dictionary of ``{key: value}`` pairs.
+    """
+    # add keys Z and W only if data in mm is provided
+    if "X" in dic_data:
+        threed_keys = ("z", "w", "Z", "W")
+    else:
+        threed_keys = ("z", "w")
+
+    for key in threed_keys:
+        if key not in dic_data:
+            arr = np.zeros_like(dic_data["sigma"].data)
+            dic_data[key] = np.ma.masked_array(arr, mask=dic_data["sigma"].mask)
 
 
 def load_dic_data(filename, variable_names=None):
@@ -178,6 +205,7 @@ def load_dic_data(filename, variable_names=None):
     """
     dic_data = spio.loadmat(filename, variable_names=variable_names)
     _mask_bad_data(dic_data)
+    _make_3D(dic_data)
     _store_min_pixel_values(dic_data)
     return dic_data
 
