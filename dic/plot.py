@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import show, savefig
 import matplotlib.image as mpimg
 import numpy as np
-from .scale import px_per_mm
 
 __all__ = ["plot_overlay", "plot_xy", "plot_colorbar", "show", "savefig"]
 
@@ -70,9 +69,8 @@ def plot_overlay(image_filename, dic_data, key, fig=None, ax=None,
         ax = fig.gca()
 
     ax.set_axis_off()
-    scale = px_per_mm(dic_data)
-    x = dic_data["x"] + dic_data["U"] * scale
-    y = dic_data["y"] - dic_data["V"] * scale
+    x = dic_data["x"] + dic_data["u"]
+    y = dic_data["y"] + dic_data["v"]
     z = dic_data[key]
 
     if image_options is None:
